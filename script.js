@@ -202,6 +202,7 @@ class UPSCTracker {
     }
 
     attachEvents() {
+        console.log("Events attached");
         const form = document.getElementById('dailyForm');
         if (form) {
             form.addEventListener('submit', (e) => {
@@ -213,9 +214,10 @@ class UPSCTracker {
         // Google Sign In Button
         const googleBtn = document.getElementById('googleSignIn');
         if (googleBtn) {
-            googleBtn.addEventListener('click', () => this.googleSignIn());
-        }
-    }
+            googleBtn.addEventListener('click', () => 
+                console.log("Button clicked");
+                this.googleSignIn());
+      }
 
     saveTodayData() {
         const todayKey = this.getTodayKey();
