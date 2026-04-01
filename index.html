@@ -1,179 +1,55 @@
-Tu<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>UPSC Prep Tracker</title>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins&display=swap" rel="stylesheet">
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <link rel="stylesheet" href="style.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>UPSC Tracker</title>
 </head>
+
 <body>
-    <div class="container">
-        <header>
-            <h1>🧠 UPSC Preparation Tracker</h1>
-            <p>Track your daily progress and analyze your preparation journey</p>
-        </header>
 
-        <!-- Daily Input Section -->
-        <section class="input-section">
-            <h2>📝 Today's Progress</h2>
-            <div class="date-display">
-                <span id="currentDate"></span>
-            </div>
-            <form id="dailyForm">
-                <div class="subjects-grid">
-                    <div class="subject-input">
-                        <label>📚 Polity</label>
-                        <input type="number" id="polity" min="0" max="10" placeholder="Hours">
-                    </div>
-                    <div class="subject-input">
-                        <label>🌍 Geography</label>
-                        <input type="number" id="geography" min="0" max="10" placeholder="Hours">
-                    </div>
-                    <div class="subject-input">
-                        <label>📖 History</label>
-                        <input type="number" id="history" min="0" max="10" placeholder="Hours">
-                    </div>
-                    <div class="subject-input">
-                        <label>💰 Economy</label>
-                        <input type="number" id="economy" min="0" max="10" placeholder="Hours">
-                    </div>
-                    <div class="subject-input">
-                        <label>🌿 Environment</label>
-                        <input type="number" id="environment" min="0" max="10" placeholder="Hours">
-                    </div>
-                    <div class="subject-input">
-                        <label>📝 Current Affairs</label>
-                        <input type="number" id="currentAffairs" min="0" max="10" placeholder="Hours">
-                    </div>
-                    <div class="subject-input full-width">
-                        <label>✍️ Practice Tests/Mocks</label>
-                        <input type="number" id="practice" min="0" max="5" placeholder="Tests">
-                    </div>
-                    <div class="subject-input full-width">
-                        <label>📋 Revision</label>
-                        <input type="number" id="revision" min="0" max="10" placeholder="Hours">
-                    </div>
-                </div>
-                <button type="submit" class="save-btn">💾 Save Today's Progress</button>
-            </form>
-        </section>
+<h1>UPSC Tracker 🔥</h1>
 
-        <!-- Stats Section -->
-        <section class="stats-section">
-            <h2>📊 Today's Stats</h2>
-            <div class="stats-grid" id="todayStats">
-                <div class="stat-card">
-                    <div class="stat-value" id="totalHours">0</div>
-                    <div class="stat-label">Total Hours</div>
-                </div>
-                <div class="stat-card">
-                    <div class="stat-value" id="completionPercent">0%</div>
-                    <div class="stat-label">Completion</div>
-                </div>
-                <div class="stat-card">
-                    <div class="stat-value" id="streak">0</div>
-                    <div class="stat-label">Streak</div>
-                </div>
-            </div>
-        </section>
-
-        <!-- Charts Section -->
-        <section class="charts-section">
-            <h2>📈 Analysis Dashboard</h2>
-            <div class="charts-grid">
-                <div class="chart-container">
-                    <h3>Weekly Subject Progress</h3>
-                    <canvas id="weeklyChart"></canvas>
-                </div>
-                <div class="chart-container">
-                    <h3>Monthly Trend</h3>
-                    <canvas id="monthlyChart"></canvas>
-                </div>
-                <div class="chart-container">
-                    <h3>Subject Performance</h3>
-                    <canvas id="subjectChart"></canvas>
-                </div>
-            </div>
-        </section>
-        <section>
-  <h2>🛒 Products</h2>
-  <div id="products-container"></div>
-        </section>
-
-        <!-- Streak Calendar -->
-        <section class="calendar-section">
-            <h2>🔥 Streak Calendar</h2>
-            <div id="streakCalendar"></div>
-        </section> 
-<!-- About Section -->
-<section class="about-section">
-  <h2>ℹ️ About This Tracker</h2>
-  <p>
-    This UPSC Preparation Tracker helps you monitor your daily study progress,
-    track subject-wise performance, and maintain consistency with streaks.
-  </p>
-  <p>
-    Built for serious aspirants who want discipline, analysis, and growth 🚀
-  </p>
-</section> 
 <button onclick="login()">Login with Google</button>
 <button onclick="logout()">Logout</button>
 <button onclick="addProduct()">Add Product</button>
-    </div>
-        <script type="module">
-            import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-import { getAnalytics } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-analytics.js";
-import {
-  getFirestore,
-  collection,
-  addDoc,
-  getDocs
-} from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
-import {
-  getAuth,
-  signInWithPopup,
-  GoogleAuthProvider,
+<div id="products-container"></div>
+
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+import { getFirestore, collection, addDoc, getDocs, query, where } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+import { 
+  getAuth, 
+  GoogleAuthProvider, 
+  signInWithRedirect,
+  getRedirectResult,
   onAuthStateChanged,
   signOut
 } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
 
-  const firebaseConfig = {
-    apiKey: "AIzaSyBZYzLJ3Ba0UTWWX25ApTFMxdrp7TxNhV4", 
-    authDomain: "upsc-tracker-f4f30.firebaseapp.com",
-    projectId: "upsc-tracker-f4f30",
-    storageBucket: "upsc-tracker-f4f30.appspot.com",
-    messagingSenderId: "984156387207",
-    appId: "1:984156387207:web:480541277bb02f0fc1c522",
-    measurementId: "G-V5GZT9P8XT"
-  };
+const firebaseConfig = {
+  apiKey: "YOUR_API_KEY",
+  authDomain: "upsc-tracker-f4f30.firebaseapp.com",
+  projectId: "upsc-tracker-f4f30",
+  storageBucket: "upsc-tracker-f4f30.appspot.com",
+  messagingSenderId: "984156387207",
+  appId: "1:984156387207:web:480541277bb02f0fc1c522"
+};
 
-            // 🔥 Init
 const app = initializeApp(firebaseConfig);
-const analytics = getAnalytics(app);
 const db = getFirestore(app);
-
-// 🔐 Auth setup
 const auth = getAuth(app);
 const provider = new GoogleAuthProvider();
 
 
-// 🔐 LOGIN
-window.login = async function ) {
-  try {
-    console.log("LOGIN CLICKED 🔥");
-    await signInWithPopup(auth, provider); 
-  } catch (e) {
-    console.error(e);
-  }
+// 🔥 LOGIN (REDIRECT FIXED)
+window.login = async function () {
+  await signInWithRedirect(auth, provider);
 };
 
-// 🚪 LOGOUT
-window.logout = async function () {
-  await signOut(auth);
-};
+
+// 🔥 HANDLE REDIRECT RESULT
 getRedirectResult(auth)
   .then((result) => {
     if (result && result.user) {
@@ -181,21 +57,28 @@ getRedirectResult(auth)
     }
   })
   .catch((error) => {
-    console.error(error);
+    console.error("Login error:", error);
   });
 
-// 👀 USER DETECT
+
+// 🔥 LOGOUT
+window.logout = async function () {
+  await signOut(auth);
+};
+
+
+// 🔥 USER DETECT
 onAuthStateChanged(auth, (user) => {
   if (user) {
     console.log("Logged in:", user.uid);
     loadProducts(user.uid);
   } else {
-    document.getElementById("products-container").innerHTML = "Login karo 🔐";
+    document.getElementById("products-container").innerHTML = "Login karo 😅";
   }
 });
 
 
-// 📦 LOAD PRODUCTS (user-wise)
+// 🔥 LOAD USER DATA (IMPORTANT FIX)
 window.loadProducts = async function (uid) {
   const container = document.getElementById("products-container");
   container.innerHTML = "";
@@ -203,15 +86,14 @@ window.loadProducts = async function (uid) {
   const q = query(collection(db, "products"), where("uid", "==", uid));
   const snapshot = await getDocs(q);
 
-  snapshot.forEach(doc => {
+  snapshot.forEach((doc) => {
     const product = doc.data();
 
     const div = document.createElement("div");
     div.innerHTML = `
-      <div style="border:1px solid #ddd; padding:10px; margin:10px;">
-        <img src="${product.image || 'https://via.placeholder.com/150'}" width="100%">
-        <h3>${product.name || 'No Name'}</h3>
-        <p>₹${product.price || 0}</p>
+      <div style="border:1px solid #ccc; padding:10px; margin:10px;">
+        <h3>${product.name}</h3>
+        <p>${product.price}</p>
       </div>
     `;
 
@@ -220,28 +102,25 @@ window.loadProducts = async function (uid) {
 };
 
 
-// ➕ ADD PRODUCT (with UID)
+// 🔥 ADD PRODUCT (USER-WISE SAVE)
 window.addProduct = async function () {
-  try {
-    const user = auth.currentUser;
+  const user = auth.currentUser;
 
-if (!user) return alert("Login karo pehle ❌");
-
-    await addDoc(collection(db, "products"), {
-      name: "Test Product",
-      price: 99,
-      image: "https://via.placeholder.com/150",
-      uid: user.uid // 🔥 MOST IMPORTANT
-    });
-
-    alert("Product Added 🔥");
-  } catch (e) {
-    console.error(e);
+  if (!user) {
+    alert("Login karo pehle ❌");
+    return;
   }
+
+  await addDoc(collection(db, "products"), {
+    name: "Test Product",
+    price: 100,
+    uid: user.uid
+  });
+
+  loadProducts(user.uid);
 };
-            
-loadProducts();
-        </script>
+
+</script>
 
 </body>
 </html>
