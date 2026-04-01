@@ -76,7 +76,8 @@ body {
     display: flex;
     align-items: center;
     gap: 15px;
-    
+} 
+
 .container {
     max-width: 1200px;
     margin: 0 auto;
