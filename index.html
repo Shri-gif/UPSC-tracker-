@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+Tu<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -153,22 +153,22 @@ const container = document.getElementById("products-container");
 
   const snapshot = await getDocs(collection(db, "products"));
 
-  snapshot.forEach(doc => {
-    const product = doc.data();
+     snapshot.forEach(doc => {
+  const product = doc.data();
+  console.log("DATA:", product);  // 👈 yaha add karo
 
-    const div = document.createElement("div");
-    div.innerHTML = `
-      <div style="border:1px solid #ddd; padding:10px; margin:10px;">
-        <img src="${product.image}" width="100%">
-        <h3>${product.name}</h3>
-        <p>₹${product.price}</p>
-      </div>
-    `;
+  const div = document.createElement("div");
+  div.innerHTML = `
+    <div style="border:1px solid #ddd; padding:10px; margin:10px;">
+      <img src="${product.image || 'https://via.placeholder.com/150'}" width="100%">
+      <h3>${product.name || 'No Name'}</h3>
+      <p>₹${product.price || 0}</p>
+    </div>
+  `;
 
-    container.appendChild(div);
-  });
-};
-
+  container.appendChild(div);
+});
+        
   // ✅ TEST: Add product (manual call)
   window.addProduct = async function () {
     try {
