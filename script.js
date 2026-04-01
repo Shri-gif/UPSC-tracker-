@@ -1,11 +1,12 @@
 // Firebase Configuration - Replace with your config
 const firebaseConfig = {
-    apiKey: "your-api-key",
-    authDomain: "your-project.firebaseapp.com",
-    projectId: "your-project-id",
-    storageBucket: "your-project.appspot.com",
-    messagingSenderId: "123456789",
-    appId: "your-app-id"
+apiKey: "AIzaSyBZYzLJ3Ba0UTWWX25ApTFMxdrp7TxNhV4",
+authDomain: "upsc-tracker-f4f30.firebaseapp.com",
+projectId: "upsc-tracker-f4f30",
+storageBucket: "upsc-tracker-f4f30.appspot.com",
+messagingSenderId: "984156387207",
+appId: "1:984156387207: web: 480541277bb02f0fc1c522",
+measurementId: "G-V5GZT9P8XT"
 };
 
 // Initialize Firebase
