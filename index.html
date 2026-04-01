@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>UPSC Tracker - Daily Routine & Analysis</title>
+    <!-- Firebase v10 Modular SDK -->
+    <script type="module">
+        import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.13.1/firebase-app.js';
+        import { getAuth, signInWithEmailAndPassword, signOut, onAuthStateChanged, createUserWithEmailAndPassword } from 'https://www.gstatic.com/firebasejs/10.13.1/firebase-auth.js';
+        import { getFirestore, collection, addDoc, getDocs, query, where, orderBy, limit } from 'https://www.gstatic.com/firebasejs/10.13.1/firebase-firestore.js';
+        
+        window.firebaseModules = {
+            initializeApp, getAuth, signInWithEmailAndPassword, signOut, 
+            onAuthStateChanged, createUserWithEmailAndPassword,
+            getFirestore, collection, addDoc, getDocs, query, where, orderBy, limit
+        };
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <h1 class="logo"><i class="fas fa-graduation-cap"></i> UPSC Tracker</h1>
+            <div class="nav-buttons">
+                <button id="loginBtn" class="btn btn-primary"><i class="fas fa-sign-in-alt"></i> Login</button>
+                <button id="logoutBtn" class="btn btn-secondary" style="display: none;"><i class="fas fa-sign-out-alt"></i> Logout</button>
+                <span id="userEmail" class="user-email" style="display: none;"></span>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Loading Spinner -->
+    <div id="loadingSpinner" class="loading-spinner" style="display: none;">
+        <div class="spinner"></div>
+        <p>Loading...</p>
+    </div>
+
+    <!-- Main Content -->
+    <div class="container">
+        <!-- Dashboard -->
+        <div id="dashboard" class="dashboard" style="display: none;">
+            <div class="dashboard-header">
+                <div>
+                    <h2>Welcome back! <span id="welcomeName"></span></h2>
+                    <p>Track your UPSC preparation journey 🚀</p>
+                </div>
+                <button id="addEntryBtn" class="btn btn-success"><i class="fas fa-plus"></i> Add Today's Entry</button>
+            </div>
+
+            <!-- Stats Cards -->
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <h3 id="totalDays">0</h3>
+                    <p><i class="fas fa-calendar"></i> Total Days</p>
+                </div>
+                <div class="stat-card">
+                    <h3 id="avgStudyHours">0h</h3>
+                    <p><i class="fas fa-clock"></i> Avg Hours/Day</p>
+                </div>
+                <div class="stat-card">
+                    <h3 id="consistency">0%</h3>
+                    <p><i class="fas fa-chart-line"></i> Consistency</p>
+                </div>
+                <div class="stat-card">
+                    <h3 id="streak">0</h3>
+                    <p><i class="fas fa-fire"></i> Current Streak</p>
+                </div>
+            </div>
+
+            <!-- Charts Section -->
+            <div class="charts-section">
+                <div class="chart-container">
+                    <h3>📊 Weekly Study Hours</h3>
+                    <canvas id="weeklyChart"></canvas>
+                </div>
+                <div class="chart-container">
+                    <h3>📚 Subject Analysis (7 days)</h3>
+                    <canvas id="subjectChart"></canvas>
+                </div>
+            </div>
+
+            <!-- Recent Entries -->
+            <div class="recent-entries">
+                <h3><i class="fas fa-history"></i> Recent Entries</h3>
+                <div id="entriesList" class="entries-grid"></div>
+            </div>
+        </div>
+
+        <!-- Login Modal -->
+        <div id="loginModal" class="modal">
+            <div class="modal-content">
+                <span class="close">&times;</span>
+                <div id="authHeader">
+                    <h2>Login to UPSC Tracker</h2>
+                    <p>Track your preparation with analytics</p>
+                </div>
+                <form id="loginForm">
+                    <div class="form-group">
+                        <label><i class="fas fa-envelope"></i> Email</label>
+                        <input type="email" id="email" placeholder="your.email@example.com" required>
+                    </div>
+                    <div class="form-group">
+                        <label><i class="fas fa-lock"></i> Password</label>
+                        <input type="password" id="password" placeholder="Enter your password" required>
+                    </div>
+                    <button type="submit" class="btn btn-primary full-width" id="authBtn">
+                        <span id="authBtnText">Login</span>
+                        <span id="authSpinner" class="spinner-small" style="display: none;"></span>
+                    </button>
+                </form>
+                <div class="auth-toggle">
+                    <p id="toggleText">Don't have an account? <a href="#" id="createAccountLink">Create one</a></p>
+                </div>
+                <div id="authError" class="error-message" style="display: none;"></div>
+            </div>
+        </div>
+
+        <!-- Add Entry Modal -->
+        <div id="addEntryModal" class="modal">
+            <div class="modal-content large-modal">
+                <span class="close">&times;</span>
+                <h2><i class="fas fa-plus-circle"></i> Add Study Entry</h2>
+                <form id="entryForm">
+                    <div class="form-group">
+                        <label><i class="fas fa-calendar"></i> Date</label>
+                        <input type="date" id="entryDate" required>
+                    </div>
+                    
+                    <div class="subjects-grid">
+                        <div class="form-group">
+                            <label><i class="fas fa-book"></i> GS Hours</label>
+                            <input type="number" id="gsHours" min="0" step="0.5" placeholder="0.0">
+                        </div>
+                        <div class="form-group">
+                            <label><i class="fas fa-puzzle-piece"></i> CSAT</label>
+                            <input type="number" id="csatHours" min="0" step="0.5" placeholder="0.0">
+                        </div>
+                        <div class="form-group">
+                            <label><i class="fas fa-star"></i> Optional</label>
+                            <input type="number" id="optionalHours" min="0" step="0.5" placeholder="0.0">
+                        </div>
+                        <div class="form-group">
+                            <label><i class="fas fa-newspaper"></i> Current Affairs</label>
+                            <input type="number" id="currentAffairs" min="0" step="0.5" placeholder="0.0">
+                        </div>
+                        <div class="form-group">
+                            <label><i class="fas fa-redo"></i> Revision</label>
+                            <input type="number" id="revisionHours" min="0" step="0.5" placeholder="0.0">
+                        </div>
+                        <div class="form-group">
+                            <label><i class="fas fa-clipboard-check"></i> Mock Tests</label>
+                            <input type="number" id="mockHours" min="0" step="0.5" placeholder="0.0">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label><i class="fas fa-sticky-note"></i> Notes</label>
+                        <textarea id="notes" rows="3" placeholder="Today's progress, challenges, achievements..."></textarea>
+                    </div>
+
+                    <button type="submit" class="btn btn-success full-width">
+                        <i class="fas fa-save"></i> Save Entry
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script type="module" src="script.js"></script>
+</body>
+</html>
