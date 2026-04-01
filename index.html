@@ -117,6 +117,55 @@
 
     </div>
 
-    <script src="script.js"></script>
+    <script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+  import { getAnalytics } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-analytics.js";
+  import { 
+    getFirestore, 
+    collection, 
+    addDoc, 
+    getDocs 
+  } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+
+  const firebaseConfig = {
+    apiKey: "AIzaSyBZYzLJ3Ba0UTWWX25ApTFMxdrp7TxNhV4", 
+    authDomain: "upsc-tracker-f4f30.firebaseapp.com",
+    projectId: "upsc-tracker-f4f30",
+    storageBucket: "upsc-tracker-f4f30.appspot.com",
+    messagingSenderId: "984156387207",
+    appId: "1:984156387207:web:480541277bb02f0fc1c522",
+    measurementId: "G-V5GZT9P8XT"
+  };
+
+  // Initialize Firebase
+  const app = initializeApp(firebaseConfig);
+  const analytics = getAnalytics(app);
+
+  // 🔥 Firestore start
+  const db = getFirestore(app);
+
+  // ✅ TEST: Add product (manual call)
+  window.addProduct = async function () {
+    try {
+      await addDoc(collection(db, "products"), {
+        name: "Test Product",
+        price: 99,
+        image: "https://via.placeholder.com/150"
+      });
+      alert("Product Added 🔥");
+    } catch (e) {
+      console.error(e);
+    }
+  };
+
+  // ✅ Load products
+  window.loadProducts = async function () {
+    const querySnapshot = await getDocs(collection(db, "products"));
+    querySnapshot.forEach((doc) => {
+      console.log(doc.data());
+    });
+  };
+
+</script>
 </body>
 </html>
