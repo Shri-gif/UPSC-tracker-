@@ -134,7 +134,7 @@ import {
 
 import {
   getAuth,
-  signInWithPopup,
+  signInWithRedirect,
   GoogleAuthProvider,
   onAuthStateChanged,
   signOut
@@ -163,6 +163,7 @@ const provider = new GoogleAuthProvider();
 // 🔐 LOGIN
 window.login = async function ) {
   try {
+    console.log("LOGIN CLICKED 🔥");
     await signInWithRedirect(auth, provider);
   } catch (e) {
     console.error(e);
