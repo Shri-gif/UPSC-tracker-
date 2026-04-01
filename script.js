@@ -1,4 +1,4 @@
-// Firebase Configuration - Replace with your config
+Y// Firebase Configuration - Replace with your config
 const firebaseConfig = {
 apiKey:"AIzaSyBZYzLJ3Ba0UTWWX25ApTFMxdrp7TxNhV4",
 authDomain:"upsc-tracker-f4f30.firebaseapp.com",
@@ -456,8 +456,11 @@ class UPSCTracker {
 }
 
 // Global tracker instance
-const tracker = new UPSCTracker(); 
+window.onload = () => {
+  const tracker = new UPSCTracker();
+  tracker.attachEvents();
+}; 
 
 window.googleSignIn = function () {
-  tracker.googleSignIn();
+tracker.googleSignIn();
 };
