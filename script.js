@@ -14,7 +14,6 @@ firebase.initializeApp(firebaseConfig);
 const auth = firebase.auth();
 const db = firebase.firestore();
 
-// Redirect result (login ke baad)
 auth.getRedirectResult()
 .then((result) => {
     if (result.user) {
@@ -62,7 +61,7 @@ class UPSCTracker {
             provider.setCustomParameters({
                 'prompt': 'select_account'
             });
-            await auth.signInWithRedirect(provider);
+            await auth.signInWithPopup(provider);
         } catch (error) {
             console.error('Google Sign In Error:', error);
             alert('Login failed: ' + error.message);
@@ -82,12 +81,13 @@ class UPSCTracker {
         if (!this.currentUser) return;
         
         try {
-            const snapshot = await db.collection(this.userDataPath.split('/')[0])
-                .doc(this.currentUser.uid)
-                .collection('upsc_data')
-                .orderBy('date', 'desc')
-                .limit(365) // Last year data
-                .get();
+            const snapshot = await db
+  .collection("users")
+  .doc(this.currentUser.uid)
+  .collection("upsc_data")
+  .orderBy("date", "desc")
+  .limit(365)
+  .get(); 
             
             this.data = {};
             snapshot.forEach(doc => {
