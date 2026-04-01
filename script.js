@@ -452,3 +452,7 @@ class UPSCTracker {
 
 // Global tracker instance
 const tracker = new UPSCTracker(); 
+
+window.googleSignIn = function () {
+  tracker.googleSignIn();
+};
