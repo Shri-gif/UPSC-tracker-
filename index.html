@@ -161,9 +161,9 @@ const provider = new GoogleAuthProvider();
 
 
 // 🔐 LOGIN
-window.login = async function () {
+window.login = async function ) {
   try {
-    await signInWithPopup(auth, provider);
+    await signInWithRedirect(auth, provider);
   } catch (e) {
     console.error(e);
   }
@@ -173,7 +173,15 @@ window.login = async function () {
 window.logout = async function () {
   await signOut(auth);
 };
-
+getRedirectResult(auth)
+  .then((result) => {
+    if (result && result.user) {
+      console.log("Login success:", result.user.uid);
+    }
+  })
+  .catch((error) => {
+    console.error(error);
+  });
 
 // 👀 USER DETECT
 onAuthStateChanged(auth, (user) => {
