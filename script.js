@@ -9,10 +9,21 @@ appId:"1:984156387207:web:480541277bb02f0fc1c522",
 measurementId:"G-V5GZT9P8XT"
 };
 
-// Initialize Firebase
+// Initialize Firebase (sabse pehle)
 firebase.initializeApp(firebaseConfig);
 const auth = firebase.auth();
 const db = firebase.firestore();
+
+// Redirect result (login ke baad)
+auth.getRedirectResult()
+.then((result) => {
+    if (result.user) {
+        console.log("Login success:", result.user.uid);
+    }
+})
+.catch((error) => {
+    console.error(error);
+});
 
 // UPSC Tracker Class with Firebase Integration
 class UPSCTracker {
