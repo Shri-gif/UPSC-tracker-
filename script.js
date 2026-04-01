@@ -202,22 +202,24 @@ class UPSCTracker {
     }
 
     attachEvents() {
-        console.log("Events attached");
-        const form = document.getElementById('dailyForm');
-        if (form) {
-            form.addEventListener('submit', (e) => {
-                e.preventDefault();
-                this.saveTodayData();
-            });
-        }
+  console.log("Events attached"); // ✅ yaha hona chahiye
 
-        // Google Sign In Button
-        const googleBtn = document.getElementById('googleSignIn');
-        if (googleBtn) {
-            googleBtn.addEventListener('click', () => 
-                console.log("Button clicked");
-                this.googleSignIn());
-      }
+  const form = document.getElementById('dailyForm');
+  if (form) {
+    form.addEventListener('submit', (e) => {
+      e.preventDefault();
+      this.saveTodayData();
+    });
+  }
+
+  const googleBtn = document.getElementById('googleSignIn');
+  if (googleBtn) {
+    googleBtn.addEventListener('click', () => {
+      console.log("Button clicked"); // ✅ sahi jagah
+      this.googleSignIn();
+    });
+  }
+}
 
     saveTodayData() {
         const todayKey = this.getTodayKey();
