@@ -33,6 +33,7 @@ class UPSCTracker {
         this.currentUser = null;
         this.charts = {};
         this.initFirebaseAuth();
+        this.attachEvents();
     }
 
     // Firebase Authentication Methods
