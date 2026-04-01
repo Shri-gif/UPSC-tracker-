@@ -1,12 +1,12 @@
 // Firebase Configuration - Replace with your config
 const firebaseConfig = {
-apiKey: "AIzaSyBZYzLJ3Ba0UTWWX25ApTFMxdrp7TxNhV4",
-authDomain: "upsc-tracker-f4f30.firebaseapp.com",
-projectId: "upsc-tracker-f4f30",
-storageBucket: "upsc-tracker-f4f30.appspot.com",
-messagingSenderId: "984156387207",
-appId: "1:984156387207: web: 480541277bb02f0fc1c522",
-measurementId: "G-V5GZT9P8XT"
+apiKey:"AIzaSyBZYzLJ3Ba0UTWWX25ApTFMxdrp7TxNhV4",
+authDomain:"upsc-tracker-f4f30.firebaseapp.com",
+projectId:"upsc-tracker-f4f30",
+storageBucket:"upsc-tracker-f4f30.appspot.com",
+messagingSenderId:"984156387207",
+appId:"1:984156387207:web:480541277bb02f0fc1c522",
+measurementId:"G-V5GZT9P8XT"
 };
 
 // Initialize Firebase
@@ -51,7 +51,7 @@ class UPSCTracker {
             provider.setCustomParameters({
                 'prompt': 'select_account'
             });
-            await auth.signInWithPopup(provider);
+            await auth.signInWithRedirect(provider);
         } catch (error) {
             console.error('Google Sign In Error:', error);
             alert('Login failed: ' + error.message);
