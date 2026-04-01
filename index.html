@@ -97,6 +97,10 @@
                 </div>
             </div>
         </section>
+        <section>
+  <h2>🛒 Products</h2>
+  <div id="products-container"></div>
+        </section>
 
         <!-- Streak Calendar -->
         <section class="calendar-section">
@@ -143,6 +147,27 @@
 
   // 🔥 Firestore start
   const db = getFirestore(app);
+        window.loadProducts = async function () {
+const container = document.getElementById("products-container");
+  container.innerHTML = "";
+
+  const snapshot = await getDocs(collection(db, "products"));
+
+  snapshot.forEach(doc => {
+    const product = doc.data();
+
+    const div = document.createElement("div");
+    div.innerHTML = `
+      <div style="border:1px solid #ddd; padding:10px; margin:10px;">
+        <img src="${product.image}" width="100%">
+        <h3>${product.name}</h3>
+        <p>₹${product.price}</p>
+      </div>
+    `;
+
+    container.appendChild(div);
+  });
+};
 
   // ✅ TEST: Add product (manual call)
   window.addProduct = async function () {
@@ -156,16 +181,8 @@
     } catch (e) {
       console.error(e);
     }
-  };
-
-  // ✅ Load products
-  window.loadProducts = async function () {
-    const querySnapshot = await getDocs(collection(db, "products"));
-    querySnapshot.forEach((doc) => {
-      console.log(doc.data());
-    });
-  };
-
+  }; 
+loadProducts();
 </script>
 </body>
 </html>
