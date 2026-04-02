@@ -14,3 +14,33 @@ authForm.addEventListener("submit", async (e) => {
     alert("Login success");
   }
 });
+
+const entryForm = document.getElementById("entryForm");
+
+entryForm.addEventListener("submit", async (e) => {
+  e.preventDefault();
+
+  const user = (await supabaseClient.auth.getUser()).data.user;
+
+  const { error } = await supabaseClient
+    .from('entries')
+    .insert([
+      {
+        user_id: user.id,
+        date: document.getElementById("entryDate").value,
+        gs_hours: document.getElementById("gsHours").value,
+        csat_hours: document.getElementById("csatHours").value,
+        optional_hours: document.getElementById("optionalHours").value,
+        current_affairs: document.getElementById("currentAffairs").value,
+        revision_hours: document.getElementById("revisionHours").value,
+        mock_hours: document.getElementById("mockHours").value,
+        notes: document.getElementById("notes").value
+      }
+    ]);
+
+  if (error) {
+    alert("Error: " + error.message);
+  } else {
+    alert("✅ Data saved!");
+  }
+});
