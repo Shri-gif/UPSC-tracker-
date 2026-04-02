@@ -103,15 +103,15 @@ entryForm.addEventListener("submit", async (e) => {
   e.preventDefault();
 
   const entry = {
-    user_id: currentUser.id,
-    date: document.getElementById("entryDate").value,
-    total_hours: parseFloat(document.getElementById("totalHours").value) || 0,
-    gs_hours: parseFloat(document.getElementById("gsHours").value) || 0,
-    csat_hours: parseFloat(document.getElementById("csatHours").value) || 0,
-    optional_hours: parseFloat(document.getElementById("optionalHours").value) || 0,
-    ca_hours: parseFloat(document.getElementById("caHours").value) || 0,
-    notes: document.getElementById("notes").value
-  };
+  user_id: currentUser.id,
+  date: document.getElementById("entryDate").value,
+  gsHours: parseFloat(document.getElementById("gsHours").value) || 0,
+  csatHours: parseFloat(document.getElementById("csatHours").value) || 0,
+  optionalHours: parseFloat(document.getElementById("optionalHours").value) || 0,
+  currentAffairs: parseFloat(document.getElementById("caHours").value) || 0,
+  revisionHours: 0,
+  mockHours: 0
+};
 
   const { error } = await supabaseClient.from("entries").insert([entry]);
 
