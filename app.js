@@ -8,12 +8,18 @@ authForm.addEventListener("submit", async (e) => {
 
   let { data, error } = await loginUser(email, password);
 
-  if (error) {
-    alert("Login failed");
-  } else {
+if (error) {
+    // Agar login fail hua → signup try karo
+    let res = await signupUser(email, password);
+
+    if (res.error) {
+        alert("Signup bhi fail: " + res.error.message);
+    } else {
+        alert("User created! Ab dobara login karo");
+    }
+} else {
     alert("Login success");
-  }
-});
+}
 
 const entryForm = document.getElementById("entryForm");
 
