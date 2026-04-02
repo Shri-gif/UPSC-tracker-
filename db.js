@@ -2,7 +2,7 @@
 const SUPABASE_URL = "https://gpcbkguyrkluazkznybf.supabase.co";
 const SUPABASE_ANON_KEY = "sb_publishable_G68X4gRScisCoGJTEKirFA_bXi-NWcL";
 
-const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY); 
 
 // Login function
 async function loginUser(email, password) {
