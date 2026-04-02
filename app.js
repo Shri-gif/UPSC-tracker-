@@ -47,7 +47,6 @@ async function loadUserEntries() {
     
   displayData(entries || []);
 }
-loadAnalytics();
 
 function displayData(entries) {
   elements.dataList.innerHTML = entries.length ? 
