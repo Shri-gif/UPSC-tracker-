@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>UPSC Prep Tracker</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🧠 UPSC Preparation Tracker</h1>
+            <p>Track your daily progress and analyze your preparation journey</p>
+        </header>
+
+        <!-- Daily Input Section -->
+        <section class="input-section">
+            <h2>📝 Today's Progress</h2>
+            <div class="date-display">
+                <span id="currentDate"></span>
+            </div>
+            <form id="dailyForm">
+                <div class="subjects-grid">
+                    <div class="subject-input">
+                        <label>📚 Polity</label>
+                        <input type="number" id="polity" min="0" max="10" placeholder="Hours">
+                    </div>
+                    <div class="subject-input">
+                        <label>🌍 Geography</label>
+                        <input type="number" id="geography" min="0" max="10" placeholder="Hours">
+                    </div>
+                    <div class="subject-input">
+                        <label>📖 History</label>
+                        <input type="number" id="history" min="0" max="10" placeholder="Hours">
+                    </div>
+                    <div class="subject-input">
+                        <label>💰 Economy</label>
+                        <input type="number" id="economy" min="0" max="10" placeholder="Hours">
+                    </div>
+                    <div class="subject-input">
+                        <label>🌿 Environment</label>
+                        <input type="number" id="environment" min="0" max="10" placeholder="Hours">
+                    </div>
+                    <div class="subject-input">
+                        <label>📝 Current Affairs</label>
+                        <input type="number" id="currentAffairs" min="0" max="10" placeholder="Hours">
+                    </div>
+                    <div class="subject-input full-width">
+                        <label>✍️ Practice Tests/Mocks</label>
+                        <input type="number" id="practice" min="0" max="5" placeholder="Tests">
+                    </div>
+                    <div class="subject-input full-width">
+                        <label>📋 Revision</label>
+                        <input type="number" id="revision" min="0" max="10" placeholder="Hours">
+                    </div>
+                </div>
+                <button type="submit" class="save-btn">💾 Save Today's Progress</button>
+            </form>
+        </section>
+
+        <!-- Stats Section -->
+        <section class="stats-section">
+            <h2>📊 Today's Stats</h2>
+            <div class="stats-grid" id="todayStats">
+                <div class="stat-card">
+                    <div class="stat-value" id="totalHours">0</div>
+                    <div class="stat-label">Total Hours</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value" id="completionPercent">0%</div>
+                    <div class="stat-label">Completion</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value" id="streak">0</div>
+                    <div class="stat-label">Streak</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Charts Section -->
+        <section class="charts-section">
+            <h2>📈 Analysis Dashboard</h2>
+            <div class="charts-grid">
+                <div class="chart-container">
+                    <h3>Weekly Subject Progress</h3>
+                    <canvas id="weeklyChart"></canvas>
+                </div>
+                <div class="chart-container">
+                    <h3>Monthly Trend</h3>
+                    <canvas id="monthlyChart"></canvas>
+                </div>
+                <div class="chart-container">
+                    <h3>Subject Performance</h3>
+                    <canvas id="subjectChart"></canvas>
+                </div>
+            </div>
+        </section>
+
+        <!-- Streak Calendar -->
+        <section class="calendar-section">
+            <h2>🔥 Streak Calendar</h2>
+            <div id="streakCalendar"></div>
+        </section>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
