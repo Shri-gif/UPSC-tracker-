@@ -1,21 +1,98 @@
-// Supabase config
-const SUPABASE_URL = "https://gpcbkguyrkluazkznybf.supabase.co";
-const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImdwY2JrZ3V5cmtsdWF6a3pueWJmIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzUwNzMwMTIsImV4cCI6MjA5MDY0OTAxMn0.NqG6ggDw2xV2mHv1B0HB78c6Td-xMgOCtGTNnpgMatw";
+// db.js
+import { createClient } from 'https://esm.sh/@supabase/supabase-js@2'
 
-const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY); 
+// Initialize Supabase client
+const supabaseUrl = 'https://gpcbkguyrkluazkznybf.supabase.co';
+const supabaseAnonKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImdwY2JrZ3V5cmtsdWF6a3pueWJmIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzUwNzMwMTIsImV4cCI6MjA5MDY0OTAxMn0.NqG6ggDw2xV2mHv1B0HB78c6Td-xMgOCtGTNnpgMatw';
 
-// Login function
-async function loginUser(email, password) {
-  return await supabaseClient.auth.signInWithPassword({
-    email,
-    password
-  });
+export const supabase = createClient(supabaseUrl, supabaseAnonKey);
+
+// Database functions
+export async function getAllData(tableName) {
+  try {
+    const { data, error } = await supabase
+      .from(tableName)
+      .select('*');
+    
+    if (error) throw error;
+    return data;
+  } catch (error) {
+    console.error('Error fetching data:', error);
+    return null;
+  }
 }
 
-// Signup function
-async function signupUser(email, password) {
-  return await supabaseClient.auth.signUp({
-    email,
-    password
-  });
+export async function getDataById(tableName, id) {
+  try {
+    const { data, error } = await supabase
+      .from(tableName)
+      .select('*')
+      .eq('id', id)
+      .single();
+    
+    if (error) throw error;
+    return data;
+  } catch (error) {
+    console.error('Error fetching data by ID:', error);
+    return null;
+  }
+}
+
+export async function insertData(tableName, data) {
+  try {
+    const { data: newData, error } = await supabase
+      .from(tableName)
+      .insert([data])
+      .select()
+      .single();
+    
+    if (error) throw error;
+    return newData;
+  } catch (error) {
+    console.error('Error inserting data:', error);
+    return null;
+  }
+}
+
+export async function updateData(tableName, id, data) {
+  try {
+    const { data: updatedData, error } = await supabase
+      .from(tableName)
+      .update(data)
+      .eq('id', id)
+      .select()
+      .single();
+    
+    if (error) throw error;
+    return updatedData;
+  } catch (error) {
+    console.error('Error updating data:', error);
+    return null;
+  }
+}
+
+export async function deleteData(tableName, id) {
+  try {
+    const { error } = await supabase
+      .from(tableName)
+      .delete()
+      .eq('id', id);
+    
+    if (error) throw error;
+    return true;
+  } catch (error) {
+    console.error('Error deleting data:', error);
+    return false;
+  }
+}
+
+// Real-time subscription helper
+export function subscribeToTable(tableName, callback) {
+  return supabase
+    .channel(tableName)
+    .on('postgres_changes', 
+      { event: '*', schema: 'public', table: tableName },
+      (payload) => callback(payload)
+    )
+    .subscribe();
 }
