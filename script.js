@@ -224,4 +224,6 @@ class UPSCTracker {
     renderSubjectChart() {
         const ctx = document.getElementById('subjectChart').getContext('2d');
         const todayKey = this.getTodayKey();
-        const todayData = this.data[today
+        const todayData = this.data[today] 
+    } 
+    console.log('App connected to Supabase!'); 
