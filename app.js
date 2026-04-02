@@ -51,6 +51,7 @@ function displayData(entries) {
   elements.dataList.innerHTML = entries.length ? 
     entries.map(entry => createEntryCard(entry)).join('') : 
     '<div class="no-entries">No study sessions yet! Add your first one! 🎯</div>';
+     generateAnalytics(entries);
 }
 
 function createEntryCard(entry) {
@@ -67,6 +68,35 @@ function createEntryCard(entry) {
       </div>
     </div>
   `;
+}
+
+function generateAnalytics(entries) {
+  if (!entries || entries.length === 0) return;
+
+  const last7 = entries.slice(0, 7).reverse();
+
+  const labels = last7.map(e => new Date(e.date).toLocaleDateString());
+  const data = last7.map(e =>
+    e.gsHours + e.csatHours + e.optionalHours +
+    e.currentAffairs + e.revisionHours + e.mockHours
+  );
+
+  const ctx = document.getElementById('weeklyChart');
+  if (!ctx) return; // 💥 crash protection
+
+  if (weeklyChart) weeklyChart.destroy();
+
+  weeklyChart = new Chart(ctx, {
+    type: 'line',
+    data: {
+      labels,
+      datasets: [{
+        label: 'Study Hours',
+        data,
+        borderWidth: 2
+      }]
+    }
+  });
 }
 
 async function handleLogin(e) {
