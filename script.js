@@ -59,17 +59,18 @@ authForm.addEventListener("submit", async (e) => {
 });
 
 if (error) {
+  console.log("LOGIN ERROR:", error);
+
   const { error: signupError } = await supabaseClient.auth.signUp({
     email,
     password,
   });
 
-  if (signupError) {
-    alert(signupError.message);
-  } else {
-    alert("Account created! Login again");
-  }
-}
+  console.log("SIGNUP ERROR:", signupError);
+
+  if (signupError) alert(signupError.message);
+  else alert("Account created! Login again");
+} 
 
 // logout
 logoutBtn.addEventListener("click", async () => {
