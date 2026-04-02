@@ -12,6 +12,8 @@ supabaseClient.auth.onAuthStateChange((event, session) => {
     currentUser = session.user;
     showDashboard();
     loadData();
+  } else {
+    showLogin();
   }
 });
 
