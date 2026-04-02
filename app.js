@@ -1,260 +1,127 @@
-class PreparationTracker {
-    constructor() {
-        this.db = new Database();
-        this.currentTab = 'add';
-        this.currentPeriod = 'week';
-        this.chart = null;
-        this.init();
-    }
+import { supabase, signUp, signIn, signOut, getCurrentUser, onAuthStateChange } from './db.js';
 
-    init() {
-        this.bindEvents();
-        this.loadRecords();
-        this.updateStats();
-        this.renderChart();
-    }
+let currentUser = null;
+let weeklyChart, monthlyChart, yearlyChart;
 
-    bindEvents() {
-        // Form submission
-        document.getElementById('prepForm').addEventListener('submit', (e) => {
-            e.preventDefault();
-            this.addRecord();
-        });
+const elements = {
+  authSection: document.getElementById('authSection'),
+  dashboardSection: document.getElementById('dashboardSection'),
+  dataList: document.getElementById('dataList'),
+  userEmail: document.getElementById('userEmail'),
+  loginForm: document.getElementById('loginForm'),
+  signupForm: document.getElementById('signupForm'),
+  addForm: document.getElementById('addForm')
+};
 
-        // Tab switching
-        document.querySelectorAll('.tab').forEach(tab => {
-            tab.addEventListener('click', (e) => {
-                const targetTab = e.target.getAttribute('onclick').match(/'([^']+)'/)[1];
-                this.switchTab(targetTab);
-            });
-        });
+async function init() {
+  currentUser = await getCurrentUser();
+  updateUI();
+  setupEventListeners();
+  
+  onAuthStateChange((_, session) => {
+    currentUser = session?.user || null;
+    updateUI();
+  });
+}
 
-        // Period selector
-        document.querySelectorAll('.period-btn').forEach(btn => {
-            btn.addEventListener('click', (e) => {
-                this.setPeriod(e.target.dataset.period);
-            });
-        });
-    }
+function updateUI() {
+  if (currentUser) {
+    elements.authSection?.classList.add('hidden');
+    elements.dashboardSection?.classList.remove('hidden');
+    elements.userEmail.textContent = currentUser.email;
+    loadUserEntries();
+  } else {
+    elements.authSection?.classList.remove('hidden');
+    elements.dashboardSection?.classList.add('hidden');
+  }
+}
 
-    switchTab(tabName) {
-        // Hide all tabs
-        document.querySelectorAll('.tab-content').forEach(tab => tab.classList.remove('active'));
-        document.querySelectorAll('.tab').forEach(tab => tab.classList.remove('active'));
+async function loadUserEntries() {
+  if (!currentUser) return;
+  
+  const { data: entries } = await supabase
+    .from('entries')
+    .select('*')
+    .eq('user_id', currentUser.id)
+    .order('date', { ascending: false });
+    
+  displayData(entries || []);
+}
 
-        // Show selected tab
-        document.getElementById(tabName).classList.add('active');
-        document.querySelector(`[onclick="switchTab('${tabName}')"]`).classList.add('active');
+function displayData(entries) {
+  elements.dataList.innerHTML = entries.length ? 
+    entries.map(entry => createEntryCard(entry)).join('') : 
+    '<div class="no-entries">No study sessions yet! Add your first one! 🎯</div>';
+}
+function createEntryCard(entry) {
+  return `
+    <div class="entry-card">
+      <div class="entry-date">${new Date(entry.date).toLocaleDateString('en-IN')}</div>
+      <div class="entry-stats">
+        <div class="stat">📖 GS<br>${entry.gsHours}h</div>
+        <div class="stat">🎯 CSAT<br>${entry.csatHours}h</div>
+        <div class="stat">📚 Opt<br>${entry.optionalHours}h</div>
+        <div class="stat">📰 CA<br>${entry.currentAffairs}h</div>
+        <div class="stat">🔄 Rev<br>${entry.revisionHours}h</div>
+        <div class="stat">📝 Mock<br>${entry.mockHours}h</div>
+      </div>
+    </div>
+  `;
+}
 
-        this.currentTab = tabName;
+async function handleLogin(e) {
+  e.preventDefault();
+  const email = document.getElementById('loginEmail').value;
+  const password = document.getElementById('loginPassword').value;
+  
+  const { error } = await signIn(email, password);
+  if (error) alert('Login failed: ' + error.message);
+}
 
-        if (tabName === 'view') {
-            this.loadRecords();
-            this.updateStats();
-        } else if (tabName === 'stats') {
-            this.updatePeriodStats();
-            this.renderChart();
-        }
-    }
+async function handleSignup(e) {
+  e.preventDefault();
+  const email = document.getElementById('signupEmail').value;
+  const password = document.getElementById('signupPassword').value;
+  
+  const { error } = await signUp(email, password);
+  if (error) alert('Signup failed: ' + error.message);
+  else alert('✅ Check your email to confirm!');
+}
 
-    async addRecord() {
-        const record = {
-            id: Date.now().toString(),
-            subject: document.getElementById('subject').value,
-            hours: parseFloat(document.getElementById('hours').value),
-            description: document.getElementById('description').value,
-            difficulty: document.getElementById('difficulty').value,
-            date: new Date().toISOString(),
-            timestamp: Date.now()
-        };
+async function addEntry(e) {
+  e.preventDefault();
+  if (!currentUser) return alert('Please login!');
 
-        await this.db.addRecord(record);
-        this.resetForm();
-        this.showNotification('✅ Record added successfully!');
-        
-        if (this.currentTab === 'view') {
-            this.loadRecords();
-            this.updateStats();
-        }
-    }
+  const entry = {
+    user_id: currentUser.id,
+    date: document.getElementById('entryDate').value,
+    gsHours: parseFloat(document.getElementById('gsHours').value) || 0,
+    csatHours: parseFloat(document.getElementById('csatHours').value) || 0,
+    optionalHours: parseFloat(document.getElementById('optionalHours').value) || 0,
+    currentAffairs: parseFloat(document.getElementById('currentAffairs').value) || 0,
+    revisionHours: parseFloat(document.getElementById('revisionHours').value) || 0,
+    mockHours: parseFloat(document.getElementById('mockHours').value) || 0,
+  };
 
-    resetForm() {
-        document.getElementById('prepForm').reset();
-    }
+  const { error } = await supabase.from('entries').insert([entry]).select().single();
+  if (!error) {
+    resetForm();
+    loadUserEntries();
+    alert('✅ Study session added!');
+  }
+}
 
-    async loadRecords() {
-        const records = await this.db.getRecords();
-        this.renderRecords(records);
-        this.updateStats(records);
-    }
+function resetForm() {
+  document.querySelectorAll('#addForm input').forEach(input => input.value = '');
+}
 
-    renderRecords(records) {
-        const container = document.getElementById('recordsList');
-        if (records.length === 0) {
-            container.innerHTML = '<p style="text-align: center; color: #6c757d; padding: 40px;">No records yet. Add your first study session! 📚</p>';
-            return;
-        }
+function setupEventListeners() {
+  elements.loginForm?.addEventListener('submit', handleLogin);
+  elements.signupForm?.addEventListener('submit', handleSignup);
+  elements.addForm?.addEventListener('submit', addEntry);
+}
 
-        container.innerHTML = records.map(record => `
-            <div class="record-item">
-                <div class="record-date">${this.formatDate(record.date)}</div>
-                <div class="record-title">${record.subject}</div>
-                <div class="record-desc">
-                    ⏱️ ${record.hours} hrs | 
-                    ${this.getDifficultyEmoji(record.difficulty)} 
-                    ${record.description || 'No description'}
-                </div>
-            </div>
-        `).join('');
-    }
+window.logout = signOut;
+window.resetForm = resetForm;
 
-    updateStats(records = null) {
-        if (!records) records = this.db.getRecordsSync();
-        
-        document.getElementById('totalRecords').textContent = records.length;
-        document.getElementById('totalHours').textContent = records.reduce((sum, r) => sum + r.hours, 0).toFixed(1);
-        
-        const days = (Date.now() - records[0]?.timestamp) / (1000 * 60 * 60 * 24) || 1;
-        document.getElementById('avgHours').textContent = (records.reduce((sum, r) => sum + r.hours, 0) / days).toFixed(1);
-    }
-
-    setPeriod(period) {
-        this.currentPeriod = period;
-        document.querySelectorAll('.period-btn').forEach(btn => btn.classList.remove('active'));
-        event.target.classList.add('active');
-        this.updatePeriodStats();
-        this.renderChart();
-    }
-
-    async updatePeriodStats() {
-        const records = await this.db.getRecords();
-        const filteredRecords = this.filterRecordsByPeriod(records, this.currentPeriod);
-        
-        const totalHours = filteredRecords.reduce((sum, r) => sum + r.hours, 0);
-        const days = this.getPeriodDays(this.currentPeriod);
-        const avgHours = totalHours / days;
-
-        document.getElementById('periodTotalHours').textContent = totalHours.toFixed(1);
-        document.getElementById('periodRecords').textContent = filteredRecords.length;
-        document.getElementById('periodAvgHours').textContent = avgHours.toFixed(1);
-        
-        const labels = ['Total Hours', 'Avg Daily', 'Records'];
-        document.getElementById('periodLabel').textContent = 
-            this.currentPeriod === 'week' ? 'This Week' :
-            this.currentPeriod === 'month' ? 'This Month' :
-            this.currentPeriod === 'year' ? 'This Year' : 'All Time';
-    }
-
-    filterRecordsByPeriod(records, period) {
-        const now = new Date();
-        const cutoff = this.getPeriodCutoff(now, period);
-        
-        return records.filter(record => new Date(record.date) >= cutoff);
-    }
-
-    getPeriodCutoff(now, period) {
-        const cutoff = new Date(now);
-        switch(period) {
-            case 'week':
-                cutoff.setDate(now.getDate() - now.getDay() - 7);
-                break;
-            case 'month':
-                cutoff.setMonth(now.getMonth() - 1);
-                break;
-            case 'year':
-                cutoff.setFullYear(now.getFullYear() - 1);
-                break;
-            case 'all':
-            default:
-                return new Date(0);
-        }
-        return cutoff;
-    }
-
-    getPeriodDays(period) {
-        const now = new Date();
-        const cutoff = this.getPeriodCutoff(now, period);
-        return (now - cutoff) / (1000 * 60 * 60 * 24);
-    }
-
-    renderChart() {
-        const ctx = document.getElementById('prepChart').getContext('2d');
-        
-        if (this.chart) {
-            this.chart.destroy();
-        }
-
-        const records = this.db.getRecordsSync();
-        const dataByDay = this.aggregateDataByDay(records, this.currentPeriod);
-
-        this.chart = new Chart(ctx, {
-            type: 'line',
-            data: {
-                labels: Object.keys(dataByDay),
-                datasets: [{
-                    label: 'Study Hours',
-                    data: Object.values(dataByDay),
-                    borderColor: '#4facfe',
-                    backgroundColor: 'rgba(79, 172, 254, 0.1)',
-                    borderWidth: 3,
-                    fill: true,
-                    tension: 0.4,
-                    pointBackgroundColor: '#4facfe',
-                    pointBorderColor: '#fff',
-                    pointBorderWidth: 2,
-                    pointRadius: 6
-                }]
-            },
-            options: {
-                responsive: true,
-                maintainAspectRatio: false,
-                plugins: {
-                    legend: {
-                        display: true,
-                        position: 'top'
-                    }
-                },
-                scales: {
-                    y: {
-                        beginAtZero: true,
-                        ticks: {
-                            callback: function(value) {
-                                return value + 'h';
-                            }
-                        }
-                    }
-                }
-            }
-        });
-    }
-
-    aggregateDataByDay(records, period) {
-        const data = {};
-        const cutoff = this.getPeriodCutoff(new Date(), period);
-        
-        records
-            .filter(r => new Date(r.date) >= cutoff)
-            .forEach(record => {
-                const date = this.formatDateShort(record.date);
-                data[date] = (data[date] || 0) + record.hours;
-            });
-
-        return data;
-    }
-
-    formatDate(dateStr) {
-        return new Date(dateStr).toLocaleDateString('en-IN', {
-            weekday: 'short',
-            year: 'numeric',
-            month: 'short',
-            day: 'numeric',
-            hour: '2-digit',
-            minute: '2-digit'
-        });
-    }
-
-    formatDateShort(dateStr) {
-        return new Date(dateStr).toLocaleDateString('en-IN', {
-            month: 'short',
-            day: 'numeric'
-        });
+document.addEventListener('DOMContentLoaded', init);
