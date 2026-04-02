@@ -178,3 +178,12 @@ document.addEventListener('DOMContentLoaded', init);
 // Export functions for global use
 window.loadData = loadData;
 window.resetForm = resetForm;
+
+// Login function example
+async function signIn(email, password) {
+  const { data, error } = await supabase.auth.signInWithPassword({
+    email,
+    password
+  });
+  return { data, error };
+}
