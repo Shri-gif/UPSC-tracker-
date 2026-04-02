@@ -1,3 +1,12 @@
+
+// 🔑 Supabase Config (YAHAN APNI KEY DAAL)
+const SUPABASE_URL = "https://gpcbkguyrkluazkznybf.supabase.co";
+const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImdwY2JrZ3V5cmtsdWF6a3pueWJmIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzUwNzMwMTIsImV4cCI6MjA5MDY0OTAxMn0.NqG6ggDw2xV2mHv1B0HB78c6Td-xMgOCtGTNnpgMatw;
+ 
+// Init
+const { createClient } = supabase;
+const supabaseClient = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
 supabaseClient.auth.onAuthStateChange((event, session) => {
   if (session) {
     currentUser = session.user;
@@ -5,15 +14,6 @@ supabaseClient.auth.onAuthStateChange((event, session) => {
     loadData();
   }
 });
-
-
-// 🔑 Supabase Config (YAHAN APNI KEY DAAL)
-const SUPABASE_URL = "https://gpcbkguyrkluazkznybf.supabase.co";
-const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImdwY2JrZ3V5cmtsdWF6a3pueWJmIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzUwNzMwMTIsImV4cCI6MjA5MDY0OTAxMn0.NqG6ggDw2xV2mHv1B0HB78c6Td-xMgOCtGTNnpgMatw;
-
-// Init
-const { createClient } = supabase;
-const supabaseClient = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
 // DOM
 const loginBtn = document.getElementById("loginBtn");
