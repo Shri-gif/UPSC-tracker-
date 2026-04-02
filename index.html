@@ -15,8 +15,53 @@
   </style> 
 </head>
 <body>
+  <!-- AUTH SECTION -->
+  <div id="authSection">
+    <h1>🔐 Login / Signup</h1>
+    
+    <div style="display: flex; gap: 20px;">
+      <!-- LOGIN FORM -->
+      <form id="loginForm" style="flex: 1;">
+        <h3>Login</h3>
+        <input type="email" id="loginEmail" placeholder="Email" required>
+        <input type="password" id="loginPassword" placeholder="Password" required>
+        <button type="submit">Login 🚀</button>
+      </form>
+      
+      <!-- SIGNUP FORM -->
+      <form id="signupForm" style="flex: 1;">
+        <h3>Sign Up</h3>
+        <input type="email" id="signupEmail" placeholder="Email" required>
+        <input type="password" id="signupPassword" placeholder="Password (6+ chars)" required>
+        <button type="submit">Sign Up 📝</button>
+      </form>
+    </div>
+  </div>
+
+  <!-- DASHBOARD SECTION (HIDDEN INITIALLY) -->
+  <div id="dashboardSection" style="display: none;">
+    <div style="display: flex; justify-content: space-between; align-items: center;">
+      <h1>📚 UPSC Tracker</h1>
+      <div>
+        <span id="userEmail"></span>
+        <button onclick="logout()">Logout 🚪</button>
+      </div>
+    </div>
+    
+    <!-- YOUR STUDY FORM -->
+    <form id="addForm">
+      <!-- All your existing form fields -->
+      <input type="date" id="entryDate" required>
+      <input type="number" id="gsHours" step="0.5" min="0">
+      <!-- ... all other fields ... -->
+      <button type="submit">➕ Add Entry</button>
+    </form>
+    
+    <div id="dataList"></div>
+  </div>
+
+    
     <h1>My Supabase Database</h1>
-  
   <form id="addForm">
     <input type="text" id="nameInput" placeholder="Name" required>
     <input type="email" id="emailInput" placeholder="Email" required>
