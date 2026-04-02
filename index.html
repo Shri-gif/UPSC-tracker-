@@ -4,17 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>UPSC Tracker - Daily Routine & Analysis</title>
-    <!-- Firebase v10 Modular SDK -->
-    <script type="module">
-        import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.13.1/firebase-app.js';
-        import { getAuth, signInWithEmailAndPassword, signOut, onAuthStateChanged, createUserWithEmailAndPassword } from 'https://www.gstatic.com/firebasejs/10.13.1/firebase-auth.js';
-        import { getFirestore, collection, addDoc, getDocs, query, where, orderBy, limit } from 'https://www.gstatic.com/firebasejs/10.13.1/firebase-firestore.js';
-        
-        window.firebaseModules = {
-            initializeApp, getAuth, signInWithEmailAndPassword, signOut, 
-            onAuthStateChanged, createUserWithEmailAndPassword,
-            getFirestore, collection, addDoc, getDocs, query, where, orderBy, limit
-        };
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script> 
     </script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
@@ -26,7 +16,7 @@
         <div class="nav-container">
             <h1 class="logo"><i class="fas fa-graduation-cap"></i> UPSC Tracker</h1>
             <div class="nav-buttons">
-                <button id="loginBtn" class="btn btn-primary"><i class="fas fa-sign-in-alt"></i> Login</button>
+                <button id="googleSignIn"><i class="fas fa-sign-in-alt"></i> Login</button>
                 <button id="logoutBtn" class="btn btn-secondary" style="display: none;"><i class="fas fa-sign-out-alt"></i> Logout</button>
                 <span id="userEmail" class="user-email" style="display: none;"></span>
             </div>
