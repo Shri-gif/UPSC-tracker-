@@ -42,7 +42,7 @@ async function checkUser() {
     showLogin();
   }
 }
-
+setTimeout(checkUser, 3000);
 
 // login/signup
 authForm.addEventListener("submit", async (e) => {
@@ -77,7 +77,7 @@ logoutBtn.addEventListener("click", async () => {
   await supabaseClient.auth.signOut();
   location.reload();
 });
-
+showLogin();
 // ================= UI =================
 
 function showDashboard() {
