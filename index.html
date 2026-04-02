@@ -167,8 +167,91 @@
                 </form>
             </div>
         </div>
-    </div>
+    </div> 
+<script>
+// FIXED SUPABASE CONFIG
+const SUPABASE_URL = "https://gpcbkguyrkluazkznybf.supabase.co";
+const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."; // Your key
 
-    <script type="module" src="script.js"></script>
+const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+// FIXED AUTH LISTENER
+supabaseClient.auth.onAuthStateChange((event, session) => {
+  if (session?.user) {
+    currentUser = session.user;
+    showDashboard();
+    loadData();
+  } else {
+    currentUser = null;
+    showLogin();
+  }
+});
+
+// FIXED LOGIN FORM
+authForm.addEventListener("submit", async (e) => {
+  e.preventDefault();
+  
+  const email = document.getElementById("email").value;
+  const password = document.getElementById("password").value;
+  
+  // Show loading
+  authForm.innerHTML += '<div id="loading">Logging in...</div>';
+  
+  try {
+    const { data, error } = await supabaseClient.auth.signInWithPassword({
+      email, password
+    });
+    
+    if (error) throw error;
+    
+    // SUCCESS
+    showDashboard();
+    loginModal.style.display = "none";
+    
+  } catch (error) {
+    if (error.message.includes('Invalid login credentials')) {
+      // Try signup
+      const { error: signupError } = await supabaseClient.auth.signUp({
+        email, password
+      });
+      
+      if (signupError?.message.includes('already registered')) {
+        alert('✅ Account exists! Did you verify email?');
+      } else if (signupError) {
+        alert(`Signup failed: ${signupError.message}`);
+      } else {
+        alert('✅ Account created! Check email to verify.');
+      }
+    } else {
+      alert(`Error: ${error.message}`);
+    }
+  }
+  
+  // Remove loading
+  document.getElementById("loading")?.remove();
+});
+
+// FIXED INIT
+async function init() {
+  // Wait for DOM
+  await new Promise(r => setTimeout(r, 100));
+  
+  // Check elements exist
+  if (!document.getElementById("loginBtn")) {
+    console.error("❌ Required DOM elements missing!");
+    return;
+  }
+  
+  // Check initial auth state
+  const { data } = await supabaseClient.auth.getSession();
+  if (data.session?.user) {
+    currentUser = data.session.user;
+    showDashboard();
+    loadData();
+  }
+}
+
+init(); // Call init
+</script>
 </body>
 </html>
