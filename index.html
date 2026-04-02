@@ -49,6 +49,14 @@
         .hidden { display: none !important; }
         .no-entries { text-align: center; color: #666; font-style: italic; padding: 40px; }
         @media (max-width: 768px) { .auth-container { flex-direction: column; } }
+        .chart-card { 
+                background: white; padding: 25px; border-radius: 15px; 
+                box-shadow: 0 10px 30px rgba(0,0,0,0.1); text-align: center;
+}
+        .total-hours { 
+               font-size: 24px; font-weight: bold; color: #667eea; 
+               margin-top: 15px; font-size: 28px;
+}
     </style>
 </head>
 <body>
@@ -130,6 +138,26 @@
                 <button type="submit">➕ Add Study Session</button>
                 <button type="button" class="btn-small" onclick="resetForm()" style="width: auto; background: #6c757d;">🔄 Reset</button>
             </form>
+
+            <div style="margin: 30px 0;">
+        <h2 style="text-align: center; margin-bottom: 30px;">📊 Preparation Analytics</h2>
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px;">
+            <div class="chart-card">
+                <h3>📅 This Week</h3>
+                <canvas id="weeklyChart"></canvas>
+                <div id="weeklyTotal" class="total-hours"></div>
+            </div>
+            <div class="chart-card">
+                <h3>📈 This Month</h3>
+                <canvas id="monthlyChart"></canvas>
+                <div id="monthlyTotal" class="total-hours"></div>
+            </div>
+            <div class="chart-card" style="grid-column: span 2;">
+                <h3>📊 Yearly Progress</h3>
+                <canvas id="yearlyChart"></canvas>
+            </div>
+        </div>
+    </div>
 
             <div id="dataList" class="entries-list">
                 <div class="no-entries">Login to see your study sessions! 🎯</div>
