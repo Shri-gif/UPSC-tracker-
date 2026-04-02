@@ -41,7 +41,6 @@ async function checkUser() {
   }
 }
 
-setTimeout(checkUser, 1000);
 
 // login/signup
 authForm.addEventListener("submit", async (e) => {
@@ -58,19 +57,16 @@ authForm.addEventListener("submit", async (e) => {
 });
 
 if (error) {
-  // try signup
   const { error: signupError } = await supabaseClient.auth.signUp({
     email,
     password,
   });
 
-  if (signupError) alert(signupError.message);
-  else alert("Account created! Login again");
-} else {
-  // ✅ LOGIN SUCCESS FIX
-  currentUser = data.user;
-  showDashboard();
-  loadData();
+  if (signupError) {
+    alert(signupError.message);
+  } else {
+    alert("Account created! Login again");
+  }
 }
 
 // logout
