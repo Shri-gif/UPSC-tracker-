@@ -1,18 +1,7 @@
-// Firebase Configuration
-const firebaseConfig = {
-    apiKey: "AIzaSyBZYzLJ3Ba0UTWWX25ApTFMxdrp7TxNhV4",
-    authDomain: "upsc-tracker-f4f30.firebaseapp.com",
-    projectId: "upsc-tracker-f4f30",
-    storageBucket: "upsc-tracker-f4f30.firebasestorage.app",
-    messagingSenderId: "984156387207",
-    appId: "1:984156387207:web:480541277bb02f0fc1c522",
-    measurementId: "G-V5GZT9P8XT"
-};
+const SUPABASE_URL = "https://YOUR_PROJECT.supabase.co";
+const SUPABASE_KEY = "YOUR_PUBLIC_KEY";
 
-// Initialize Firebase
-firebase.initializeApp(firebaseConfig);
-const auth = firebase.auth();
-const db = firebase.firestore();
+const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
 // Initialize variables
 let currentUser = null;
@@ -30,16 +19,20 @@ const entryForm = document.getElementById('entryForm');
 const addEntryBtn = document.getElementById('addEntryBtn');
 const createAccountLink = document.getElementById('createAccountLink');
 
-// Auth State Listener
-auth.onAuthStateChanged((user) => {
-    if (user) {
-        currentUser = user;
-        showDashboard();
-        loadDashboardData();
-    } else {
-        showLogin();
-    }
-});
+async function checkUser() {
+  const { data: { user } } = await supabase.auth.getUser();
+
+  if (user) {
+    currentUser = user;
+    showDashboard();
+    loadDashboardData();
+  } else {
+    showLogin();
+  }
+}
+
+// Page load pe call karo
+checkUser();
 
 // Show Dashboard
 function showDashboard() {
@@ -60,12 +53,20 @@ function showLogin() {
 }
 
 // Event Listeners
-loginBtn.addEventListener('click', () => {
-    loginModal.style.display = 'block';
+loginBtn.addEventListener('click', async () => {
+  const { error } = await supabase.auth.signInWithOAuth({
+    provider: 'google'
+  });
+
+  if (error) {
+    console.error(error);
+    alert("Login failed");
+  }
 });
 
-logoutBtn.addEventListener('click', () => {
-    auth.signOut();
+logoutBtn.addEventListener('click', async () => {
+  await supabase.auth.signOut();
+  location.reload();
 });
 
 addEntryBtn.addEventListener('click', () => {
@@ -93,7 +94,10 @@ loginForm.addEventListener('submit', async (e) => {
     const password = document.getElementById('password').value;
     
     try {
-        await auth.signInWithEmailAndPassword(email, password);
+        await supabase.auth.signInWithPassword({
+  email: email,
+  password: password
+});
         loginModal.style.display = 'none';
     } catch (error) {
         alert('Login failed: ' + error.message);
@@ -126,3 +130,15 @@ entryForm.addEventListener('submit', async (e) => {
         currentAffairs: parseFloat(document.getElementById('currentAffairs').value) || 0,
         revisionHours: parseFloat(document.getElementById('revisionHours').value) || 0,
         mockHours: parseFloat(document.getElementById('mockHours').value) || 0,
+    }; 
+        const { data, error } = await supabase
+  .from('entries')
+  .insert([entry]);
+
+if (error) {
+  console.error(error);
+  alert("Save failed ❌");
+} else {
+  alert("Saved successfully ✅");
+  addEntryModal.style.display = 'none';
+}
