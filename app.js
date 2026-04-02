@@ -28,13 +28,12 @@ entryForm.addEventListener("submit", async (e) => {
       {
         user_id: user.id,
         date: document.getElementById("entryDate").value,
-        gs_hours: document.getElementById("gsHours").value,
-        csat_hours: document.getElementById("csatHours").value,
-        optional_hours: document.getElementById("optionalHours").value,
-        current_affairs: document.getElementById("currentAffairs").value,
-        revision_hours: document.getElementById("revisionHours").value,
-        mock_hours: document.getElementById("mockHours").value,
-        notes: document.getElementById("notes").value
+        gsHours: document.getElementById("gsHours").value,
+        csatHours: document.getElementById("csatHours").value,
+        optionalHours: document.getElementById("optionalHours").value,
+        currentAffairs: document.getElementById("currentAffairs").value,
+        revisionHours: document.getElementById("revisionHours").value,
+        mockHours: document.getElementById("mockHours").value,
       }
     ]);
 
