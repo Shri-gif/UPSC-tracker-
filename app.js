@@ -1,6 +1,7 @@
 import { supabase, signUp, signIn, signOut, getCurrentUser, onAuthStateChange } from './db.js';
 
 let currentUser = null;
+let weeklyChart = null;
 
 const elements = {
   authSection: document.getElementById('authSection'),
@@ -82,7 +83,7 @@ function generateAnalytics(entries) {
     e.currentAffairs + e.revisionHours + e.mockHours
   );
 
-  const ctx = document.getElementById('weeklyChart');
+  const ctx = document.getElementById('trendChart');
   if (!ctx) return; // 💥 crash protection
 
   if (weeklyChart) weeklyChart.destroy();
