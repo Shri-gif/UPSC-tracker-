@@ -131,14 +131,19 @@
             }
             
             async loadData() {
+                const { data: { user } } = await supabase.auth.getUser();
+
+if (!user) {
+  document.getElementById('loadingMsg').innerText = "⚠️ Please login first";
+  return;
+}
                 try {
-                    document.getElementById('loadingMsg').textContent = '📊 Fetching data...';
-                    
+                    document.getElementById('loadingMsg').textContent = '📊 Fetching 
                     const { data, error } = await supabase
-                        .from('study_sessions')
-                        .select('*')
-                        .order('date', { ascending: false });
-                    
+                            .from('entries')
+                            .select('*')
+                            .eq('user_id', supabase.auth.getUser().then(u => u.data.user.id))
+                            .order('date', { ascending: false });
                     if (error) throw error;
                     
                     if (!data?.length) {
@@ -168,7 +173,13 @@
                     const limits = {daily:1,weekly:7,monthly:30,yearly:365}[this.period];
                     return (now - date) < limits * 24 * 60 * 60 * 1000;
                 }).forEach(session => {
-                    const hrs = parseFloat(session.hours) || 0;
+                    const hrs =
+  (session.gsHours || 0) +
+  (session.csatHours || 0) +
+  (session.optionalHours || 0) +
+  (session.currentAffairs || 0) +
+  (session.revisionHours || 0) +
+  (session.mockHours || 0); 
                     stats.total += hrs;
                     
                     const subject = session.subject || 'Other';
