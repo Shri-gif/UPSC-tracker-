@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>UPSC Reports</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    
+    <!-- SUPABASE CONFIG - APNA URL/KEY YAHAN DALO -->
+    <script>
+        // YE APNE supabase/db.js SE COPY KARO
+        window.SUPABASE_URL = 'https://gpcbkguyrkluazkznybf.supabase.co';  // APNA URL
+        window.SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImdwY2JrZ3V5cmtsdWF6a3pueWJmIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzUwNzMwMTIsImV4cCI6MjA5MDY0OTAxMn0.NqG6ggDw2xV2mHv1B0HB78c6Td-xMgOCtGTNnpgMatw'; // APNA KEY
+    </script>
+    
+    <style>
+        *{margin:0;padding:0;box-sizing:border-box;font-family:'Segoe UI',Tahoma,Geneva,Verdana,sans-serif}
+        body{background:#f8fafc;color:#1e293b;line-height:1.6}
+        .container{max-width:1200px;margin:0 auto;padding:1rem}
+        .nav{background:#fff;box-shadow:0 2px 10px rgba(0,0,0,.1);padding:1rem 0;position:sticky;top:0;z-index:100}
+        .nav-content{display:flex;justify-content:space-between;align-items:center;max-width:1200px;margin:0 auto;padding:0 1rem}
+        .logo h2{color:#1e293b;font-size:1.5rem}
+        .nav-links{display:flex;gap:2rem}
+        .nav-links a{text-decoration:none;color:#64748b;font-weight:500;padding:0.5rem 1rem;border-radius:8px;transition:all .3s}
+        .nav-links a:hover,.nav-links a.active{color:#3b82f6;background:#eff6ff}
+        .reports-container{padding:2rem 0}
+        .reports-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:2rem;flex-wrap:wrap;gap:1rem}
+        .period-selector{display:flex;gap:0.5rem;background:#fff;padding:0.75rem;border-radius:12px;box-shadow:0 2px 10px rgba(0,0,0,.08)}
+        .period-btn{padding:0.75rem 1rem;border:none;background:none;border-radius:8px;cursor:pointer;font-weight:600;font-size:14px;transition:all .3s;color:#64748b}
+        .period-btn:hover{color:#3b82f6;background:#eff6ff}
+        .period-btn.active{color:#3b82f6;background:#dbeafe;font-weight:700}
+        .stats-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:1rem;margin:2rem 0}
+        .stat-card{background:#fff;padding:1.5rem;border-radius:12px;box-shadow:0 4px 6px rgba(0,0,0,.08);text-align:center;border-top:4px solid #3b82f6}
+        .stat-card h3{color:#64748b;font-size:14px;margin-bottom:0.5rem}
+        .stat-value{font-size:2rem;font-weight:700;color:#1e293b}
+        .charts-grid{display:grid;grid-template-columns:1fr 1fr;gap:1.5rem;margin-top:2rem}
+        .chart-card{background:#fff;padding:1.5rem;border-radius:12px;box-shadow:0 4px 6px rgba(0,0,0,.08)}
+        .chart-card h3{margin-bottom:1rem;color:#1e293b;font-size:1.1rem}
+        .loading,.no-data{text-align:center;padding:3rem;color:#64748b;font-size:1.1rem}
+        .error{color:#ef4444}
+        @media(max-width:768px){.nav-links{flex-direction:column;gap:1rem;padding-top:1rem}.charts-grid{grid-template-columns:1fr}.stats-grid{grid-template-columns:1fr}}
+        canvas{height:250px!important}
+    </style>
+</head>
+<body>
+    <nav class="nav">
+        <div class="nav-content">
+            <a href="../index.html" class="logo">
+                <h2>📚 UPSC Tracker</h2>
+            </a>
+            <div class="nav-links">
+                <a href="../index.html">Dashboard</a>
+                <a href="../pages/add-study.html">Add Study</a>
+                <a href="reports.html" class="active">Reports</a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container">
+        <div class="reports-container">
+            <div class="reports-header">
+                <h1 style="font-size:2rem;color:#1e293b">📊 Study Reports</h1>
+                <div class="period-selector" id="periodSelector">
+                    <button class="period-btn active" data-period="daily">24h</button>
+                    <button class="period-btn" data-period="weekly">7d</button>
+                    <button class="period-btn" data-period="monthly">30d</button>
+                    <button class="period-btn" data-period="yearly">1y</button>
+                </div>
+            </div>
+
+            <div id="loadingMsg" class="loading">🔄 Loading your study data...</div>
+            
+            <div id="statsGrid" class="stats-grid" style="display:none;">
+                <div class="stat-card">
+                    <h3>Total Hours</h3>
+                    <div class="stat-value" id="totalHours">-</div>
+                </div>
+                <div class="stat-card">
+                    <h3>Avg per Day</h3>
+                    <div class="stat-value" id="avgDaily">-</div>
+                </div>
+                <div class="stat-card">
+                    <h3>Best Subject</h3>
+                    <div class="stat-value" id="bestSubject">-</div>
+                </div>
+                <div class="stat-card">
+                    <h3>Consistency</h3>
+                    <div class="stat-value" id="consistency">-</div>
+                </div>
+            </div>
+
+            <div id="chartsGrid" class="charts-grid" style="display:none;">
+                <div class="chart-card">
+                    <h3>📈 Study Trend</h3>
+                    <canvas id="trendChart"></canvas>
+                </div>
+                <div class="chart-card">
+                    <h3>📊 Subject Wise</h3>
+                    <canvas id="subjectChart"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script type="module">
+        import { createClient } from 'https://cdn.skypack.dev/supabase@2';
+        
+        const supabase = createClient(window.SUPABASE_URL, window.SUPABASE_ANON_KEY);
+        
+        class ReportsApp {
+            constructor() {
+                this.period = 'daily';
+                this.charts = {};
+                this.init();
+            }
+            
+            init() {
+                this.bindEvents();
+                this.loadData();
+            }
+            
+            bindEvents() {
+                document.querySelectorAll('.period-btn').forEach(btn => {
+                    btn.onclick = () => {
+                        document.querySelector('.period-btn.active').classList.remove('active');
+                        btn.classList.add('active');
+                        this.period = btn.dataset.period;
+                        this.loadData();
+                    };
+                });
+            }
+            
+            async loadData() {
+                try {
+                    document.getElementById('loadingMsg').textContent = '📊 Fetching data...';
+                    
+                    const { data, error } = await supabase
+                        .from('study_sessions')
+                        .select('*')
+                        .order('date', { ascending: false });
+                    
+                    if (error) throw error;
+                    
+                    if (!data?.length) {
+                        this.showNoData();
+                        return;
+                    }
+                    
+                    const processed = this.processData(data);
+                    this.showStats(processed.stats);
+                    this.showCharts(processed.charts);
+                    
+                } catch (e) {
+                    console.error('Error:', e);
+                    document.getElementById('loadingMsg').innerHTML = 
+                        '<span class="error">❌ Failed to load data</span><br>Open F12 Console';
+                }
+            }
+            
+            processData(rawData) {
+                const now = Date.now();
+                const stats = { total: 0, avg: 0, top: '', consistency: 0 };
+                const trend = { labels: [], data: [] };
+                const subjects = {};
+                
+                rawData.filter(session => {
+                    const date = new Date(session.date || session.created_at).getTime();
+                    const limits = {daily:1,weekly:7,monthly:30,yearly:365}[this.period];
+                    return (now - date) < limits * 24 * 60 * 60 * 1000;
+                }).forEach(session => {
+                    const hrs = parseFloat(session.hours) || 0;
+                    stats.total += hrs;
+                    
+                    const subject = session.subject || 'Other';
+                    subjects[subject] = (subjects[subject] || 0) + hrs;
+                    
+                    const dateStr = new Date(session.date || session.created_at).toISOString().split('T')[0];
+                    const idx = trend.labels.indexOf(dateStr);
+                    if (idx > -1) trend.data[idx] += hrs;
+                    else { trend.labels.push(dateStr); trend.data.push(hrs); }
+                });
+                
+                // Sort trend
+                trend.labels = trend.labels.sort();
+                trend.data = trend.labels.map((label, i) => {
+                    const idx = trend.labels.indexOf(label);
+                    return trend.data[idx] || 0;
+                }).slice(-10);
+                trend.labels = trend.labels.slice(-10);
+                
+                stats.avg = stats.total > 0 ? (stats.total / rawData.length).toFixed(1) : 0;
+                stats.top = Object.entries(subjects).sort(([,a],[,b])=>b-a)[0]?.[0] || '-';
+                stats.consistency = Math.min(100, rawData.length / 7 * 100).toFixed(0);
+                
+                return { stats, charts: { trend, subjects } };
+            }
+            
+            showStats(stats) {
+                document.getElementById('totalHours').textContent = stats.total.toFixed(1) + 'h';
+                document.getElementById('avgDaily').textContent = stats.avg + 'h';
+                document.getElementById('bestSubject').textContent = stats.top;
+                document.getElementById('consistency').textContent = stats.consistency + '%';
+                document.getElementById('statsGrid').style.display = 'grid';
+                document.getElementById('loadingMsg').style.display = 'none';
+            }
+            
+            showCharts(chartsData) {
+                document.getElementById('chartsGrid').style.display = 'grid';
+                
+                if (this.charts.trend) this.charts.trend.destroy();
+                this.charts.trend = new Chart(document.getElementById('trendChart'), {
+                    type: 'line',
+                    data: {
+                        labels: chartsData.trend.labels,
+                        datasets: [{ 
+                            data: chartsData.trend.data,
+                            borderColor: '#3b82f6',
+                            backgroundColor: 'rgba(59,130,246,0.1)',
+                            tension: 0.4,
+                            fill: true 
+                        }]
+                    },
+                    options: { responsive: true, plugins: { legend: { display: false } } }
+                });
+                
+                if (this.charts.subject) this.charts.subject.destroy();
+                this.charts.subject = new Chart(document.getElementById('subjectChart'), {
+                    type: 'doughnut',
+                    data: {
+                        labels: Object.keys(chartsData.subjects),
+                        datasets: [{ 
+                            data: Object.values(chartsData.subjects),
+                            backgroundColor: ['#3b82f6','#10b981','#f59e0b','#ef4444','#8b5cf6']
+                        }]
+                    },
+                    options: { responsive: true }
+                });
+            }
+            
+            showNoData() {
+                document.getElementById('loadingMsg').innerHTML = 
+                    '📊 No study sessions found<br><small>Add data from Dashboard first!</small>';
+            }
+        }
+        
+        new ReportsApp();
+    </script>
+</body>
+</html>
