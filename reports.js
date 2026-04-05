@@ -1,15 +1,31 @@
+import { supabase } from './db.js';
 class ReportsManager {
-    constructor() {
-        this.data = JSON.parse(localStorage.getItem('studyData')) || [];
-        this.init();
-    }
+    constructor() { 
+        this.data = [];
+    } 
 
-    init() {
+   async init() {
+        await this.loadData();
         this.renderStats();
         this.setupTabs();
-        this.renderAllCharts();
+        this.renderAllCharts(); 
+    }
+    
+async loadData() {
+    const { data, error } = await supabase
+      .from('entries')
+      .select('*')
+      .eq('user_id', user.id) 
+      .order('date', { ascending: true });
+
+    if (error) {
+      console.error('Error loading data:', error);
+      return;
     }
 
+    this.data = data || [];
+  }
+    
     renderStats() {
         const totalDays = this.data.length;
         const totalHours = this.data.reduce((sum, day) => sum + (day.hours || 0), 0);
@@ -256,5 +272,7 @@ class ReportsManager {
 
 // Initialize Reports when page loads
 document.addEventListener('DOMContentLoaded', () => {
-    new ReportsManager();
-});
+   async () => {
+  const app = new ReportsManager();
+  await app.init();
+}); 
