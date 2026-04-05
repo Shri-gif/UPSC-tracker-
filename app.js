@@ -45,6 +45,7 @@ async function loadUserEntries() {
     .order('date', { ascending: false });
     
   displayData(entries || []);
+  localStorage.setItem('studyData', JSON.stringify(entries || []));
 }
 
 function displayData(entries) {
