@@ -49,20 +49,69 @@
         .delete-btn { background: #dc3545; color: white; }
         .hidden { display: none !important; }
         .no-entries { text-align: center; color: #666; font-style: italic; padding: 40px; }
-        @media (max-width: 768px) { .auth-container { flex-direction: column; } }
-        .chart-box {
-  width: 100%;
-  max-width: 600px;
-  margin: 20px auto;
-  background: white;
-  padding: 15px;
-  border-radius: 15px;
+        @media (max-width: 768px) { .auth-container { flex-direction: column; } } 
+/* Fix Overlapping Elements */
+.container, .dashboard, .graph-container, .entries {
+    position: relative;
+    z-index: 1;
 }
 
-canvas {
-  width: 100% !important;
-  height: 300px !important;
+/* Ensure proper stacking */
+.dashboard {
+    z-index: 10;
+    position: relative;
 }
+
+.graph-container {
+    z-index: 5;
+    margin-bottom: 20px;
+    overflow: hidden;
+}
+
+/* Fix canvas/charts overlapping */
+canvas, .chart-container {
+    position: relative !important;
+    z-index: 2;
+    max-width: 100%;
+}
+
+/* Entries section spacing */
+.entries {
+    z-index: 3;
+    margin-top: 20px;
+    padding: 15px;
+    background: rgba(255,255,255,0.95);
+    border-radius: 8px;
+}
+
+/* Responsive fixes */
+@media (max-width: 768px) {
+    .graph-container, .dashboard, .entries {
+        margin-bottom: 25px !important;
+        padding: 10px !important;
+    }
+    
+    canvas {
+        height: 300px !important;
+        width: 100% !important;
+    }
+}
+
+/* Prevent absolute positioning conflicts */
+* {
+    box-sizing: border-box;
+}
+
+body {
+    overflow-x: hidden;
+}
+
+/* Specific fix for common chart libraries */
+.recharts-wrapper, .apexcharts-canvas {
+    position: relative !important;
+    z-index: 2 !important;
+}
+        
     </style>
 </head>
 <body>
