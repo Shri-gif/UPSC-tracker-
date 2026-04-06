@@ -72,10 +72,6 @@ canvas {
             <a href="index.html" class="nav-logo">
                 <h2>📚 UPSC Tracker</h2>
             </a>
-            <div class="nav-menu">
-                <a href="index.html" class="nav-link active">Dashboard</a>
-                <a href="reports/reports.html">📊 Reports</a>
-            </div>
         </div>
     </nav>
     
@@ -99,7 +95,7 @@ canvas {
                             <input type="password" id="loginPassword" placeholder="Password" required>
                         </div>
                         <button type="submit">🚀 Login</button>
-                    </form>
+      >
                 </div>
                 <div class="auth-form">
                     <h3>✨ Sign Up</h3>
@@ -122,8 +118,6 @@ canvas {
            <div class="dashboard-header">
     <div style="margin-bottom: 10px;">
     <a href="index.html">Home</a>
-    <h3 style="margin-top:20px;">📊 Reports</h3>
-    <div id="reportsSection">    
     <div>
         <h1 style="margin:0;">📚 UPSC Study Tracker</h1>
         <p style="margin: 2px 0 0; font-size: 13px; opacity: 0.8;">
@@ -136,12 +130,9 @@ canvas {
         <span id="userEmail" style="margin-right: 15px; font-weight: 600;"></span>     
         <button class="btn-small" onclick="logout()">🚪 Logout</button>
     </div>
-</div>
-        <div class="chart-box">
-    <canvas id="trendChart"></canvas>
-               </div>  
+    </div> 
 
-            <form id="addForm" class="study-form">
+         <form id="addForm" class="study-form">
                 <div class="form-group">
                     <label>📅 Date</label>
                     <input type="date" id="entryDate" required>
@@ -174,6 +165,9 @@ canvas {
                 <button type="button" class="btn-small" onclick="resetForm()" style="width: auto; background: #6c757d;">🔄 Reset</button>
             </form>
              <h3 style="margin-top:20px;">📊 Analytics</h3>
+               <div class="chart-box">
+               <canvas id="trendChart"></canvas>
+               </div>  
              <canvas id="weeklyChart"></canvas>
             <div id="dataList" class="entries-list">
                 <div class="no-entries">Login to see your study sessions! 🎯</div>
