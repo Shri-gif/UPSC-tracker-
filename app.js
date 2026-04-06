@@ -91,22 +91,25 @@ function generateAnalytics(entries) {
   weeklyChart = new Chart(ctx, {
     type: 'line',
     data: {
-      labels,
+      labels: labels,
       datasets: [{
         label: 'Study Hours',
-        data,
+        data: data,
         borderWidth: 2
       }]
     }, 
-    options: {
-    responsive: true,
-    maintainAspectRatio: false, 
-      scales: {
-        y: {
-            beginAtZero: true,
-        }
-      }
+ options: {
+  responsive: true,
+  maintainAspectRatio: false,
+  scales: {
+    y: {
+      beginAtZero: true,
+      ticks: {
+        stepSize: 1
+      } 
     } 
+  } 
+ } 
   });
 async function handleLogin(e) {
   e.preventDefault();
