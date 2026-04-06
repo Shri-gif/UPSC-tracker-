@@ -49,21 +49,19 @@
         .delete-btn { background: #dc3545; color: white; }
         .hidden { display: none !important; }
         .no-entries { text-align: center; color: #666; font-style: italic; padding: 40px; }
-         /* Site-specific overlap fix */
-.charts-container,
-.dashboard,
-.entries-list {
-    position: relative !important;
-    z-index: 1 !important;
-    margin-bottom: 25px !important;
-}
-
-canvas {
-    position: relative !important;
-    max-width: 100% !important;
-}
         @media (max-width: 768px) { .auth-container { flex-direction: column; } }
-        
+         .chart-box {
+  width: 100%;
+  max-width: 500px;
+  margin: 20px auto;
+  background: white;
+  padding: 15px;
+  border-radius: 15px;
+         }
+         canvas {
+  width: 100% !important;
+  height: 250px !important;
+         }
     </style>  
     
 </head>
