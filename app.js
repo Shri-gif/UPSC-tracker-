@@ -95,8 +95,7 @@ weeklyChart = new Chart(ctx, {
       {
     label: 'Total',
     data: data,
-    borderWidth: 4, 
-    yAxisID: 'y1'
+    borderWidth: 4
   },
       {
         label: 'GS',
@@ -137,14 +136,7 @@ weeklyChart = new Chart(ctx, {
       y: {
         beginAtZero: true, 
         position: 'left' 
-      }, 
-     y1: {
-      beginAtZero: true,
-      position: 'right',
-      grid: {
-        drawOnChartArea: false
-      } 
-     } 
+      },
    }
  }
 });
