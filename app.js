@@ -93,6 +93,11 @@ weeklyChart = new Chart(ctx, {
     labels: labels,
     datasets: [
       {
+    label: 'Total',
+    data: data,
+    borderWidth: 4
+  },
+      {
         label: 'GS',
         data: last7.map(e => e.gsHours),
         borderWidth: 2
