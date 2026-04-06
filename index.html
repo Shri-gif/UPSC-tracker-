@@ -4,115 +4,94 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>UPSC Tracker - Supabase</title>
-    
     <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { 
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
-            max-width: 900px; 
-            margin: 0 auto; 
-            padding: 20px; 
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            min-height: 100vh;
-        }
-        .container { background: white; border-radius: 20px; padding: 30px; box-shadow: 0 20px 40px rgba(0,0,0,0.1); }
-        h1 { text-align: center; color: #333; margin-bottom: 30px; }
-        .auth-container { display: flex; gap: 30px; margin-bottom: 30px; }
-        .auth-form { flex: 1; background: #f8f9fa; padding: 25px; border-radius: 15px; }
-        .form-group { margin-bottom: 20px; }
-        label { display: block; margin-bottom: 8px; font-weight: 600; color: #555; }
-        input { width: 100%; padding: 12px; border: 2px solid #e1e5e9; border-radius: 10px; font-size: 16px; transition: border-color 0.3s; }
-        input:focus { outline: none; border-color: #667eea; }
-        button { 
-            width: 100%; padding: 14px; background: linear-gradient(45deg, #667eea, #764ba2); 
-            color: white; border: none; border-radius: 10px; font-size: 16px; 
-            font-weight: 600; cursor: pointer; transition: transform 0.2s;
-        }
-        button:hover { transform: translateY(-2px); }
-        .dashboard-header { 
-            display: flex; justify-content: space-between; align-items: center; 
-            background: linear-gradient(45deg, #667eea, #764ba2); 
-            color: white; padding: 20px; border-radius: 15px; margin-bottom: 30px;
-        }
-        .study-form { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px; margin-bottom: 30px; }
-        .entries-list { display: grid; gap: 20px; }
-        .entry-card { 
-            background: #f8f9fa; border-radius: 15px; padding: 25px; 
-            border-left: 5px solid #667eea; box-shadow: 0 5px 15px rgba(0,0,0,0.08);
-        }
-        .entry-date { font-size: 24px; font-weight: bold; color: #333; margin-bottom: 15px; }
-        .entry-stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); gap: 10px; margin-bottom: 20px; }
-        .stat { background: white; padding: 12px; border-radius: 10px; text-align: center; font-weight: 600; }
-        .entry-actions { display: flex; gap: 10px; }
-        .btn-small { padding: 8px 16px; font-size: 14px; border-radius: 8px; cursor: pointer; border: none; }
-        .edit-btn { background: #28a745; color: white; }
-        .delete-btn { background: #dc3545; color: white; }
-        .hidden { display: none !important; }
-        .no-entries { text-align: center; color: #666; font-style: italic; padding: 40px; }
-        @media (max-width: 768px) { .auth-container { flex-direction: column; } } 
-/* Fix Overlapping Elements */
-.container, .dashboard, .graph-container, .entries {
-    position: relative;
-    z-index: 1;
-}
-
-/* Ensure proper stacking */
-.dashboard {
-    z-index: 10;
-    position: relative;
-}
-
-.graph-container {
-    z-index: 5;
-    margin-bottom: 20px;
-    overflow: hidden;
-}
-
-/* Fix canvas/charts overlapping */
-canvas, .chart-container {
-    position: relative !important;
-    z-index: 2;
-    max-width: 100%;
-}
-
-/* Entries section spacing */
-.entries {
-    z-index: 3;
-    margin-top: 20px;
-    padding: 15px;
-    background: rgba(255,255,255,0.95);
-    border-radius: 8px;
-}
-
-/* Responsive fixes */
-@media (max-width: 768px) {
-    .graph-container, .dashboard, .entries {
-        margin-bottom: 25px !important;
-        padding: 10px !important;
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { 
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
+        max-width: 900px; 
+        margin: 0 auto; 
+        padding: 20px; 
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        min-height: 100vh;
+        overflow-x: hidden; /* 🚀 NEW: Horizontal scroll fix */
     }
     
-    canvas {
-        height: 300px !important;
-        width: 100% !important;
+    .container { 
+        background: white; 
+        border-radius: 20px; 
+        padding: 30px; 
+        box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+        position: relative; /* 🚀 NEW: Z-index base */
+        z-index: 1;
     }
-}
-
-/* Prevent absolute positioning conflicts */
-* {
-    box-sizing: border-box;
-}
-
-body {
-    overflow-x: hidden;
-}
-
-/* Specific fix for common chart libraries */
-.recharts-wrapper, .apexcharts-canvas {
-    position: relative !important;
-    z-index: 2 !important;
-}
-        
-    </style>
+    
+    /* 🚀 OVERLAP FIXES - Ye 4 rules add kiye hain */
+    .dashboard-header,
+    .study-form,
+    .entries-list,
+    .graph-container { /* Agar graph container hai to */
+        position: relative;
+        z-index: 2;
+        margin-bottom: 25px !important; /* Proper spacing */
+    }
+    
+    /* Charts/Graphs fix */
+    canvas,
+    svg,
+    .recharts-wrapper,
+    .apexcharts-canvas {
+        position: relative !important;
+        z-index: 3 !important;
+        max-width: 100%;
+    }
+    
+    /* Baaki tumhara original CSS same */
+    h1 { text-align: center; color: #333; margin-bottom: 30px; }
+    .auth-container { display: flex; gap: 30px; margin-bottom: 30px; }
+    .auth-form { flex: 1; background: #f8f9fa; padding: 25px; border-radius: 15px; }
+    .form-group { margin-bottom: 20px; }
+    label { display: block; margin-bottom: 8px; font-weight: 600; color: #555; }
+    input { width: 100%; padding: 12px; border: 2px solid #e1e5e9; border-radius: 10px; font-size: 16px; transition: border-color 0.3s; }
+    input:focus { outline: none; border-color: #667eea; }
+    button { 
+        width: 100%; padding: 14px; background: linear-gradient(45deg, #667eea, #764ba2); 
+        color: white; border: none; border-radius: 10px; font-size: 16px; 
+        font-weight: 600; cursor: pointer; transition: transform 0.2s;
+    }
+    button:hover { transform: translateY(-2px); }
+    .dashboard-header { 
+        display: flex; justify-content: space-between; align-items: center; 
+        background: linear-gradient(45deg, #667eea, #764ba2); 
+        color: white; padding: 20px; border-radius: 15px; margin-bottom: 30px;
+        position: relative; /* 🚀 Extra safety */
+        z-index: 4;
+    }
+    .study-form { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px; margin-bottom: 30px; }
+    .entries-list { display: grid; gap: 20px; }
+    .entry-card { 
+        background: #f8f9fa; border-radius: 15px; padding: 25px; 
+        border-left: 5px solid #667eea; box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+        position: relative; /* 🚀 Entry cards safe */
+        z-index: 2;
+    }
+    .entry-date { font-size: 24px; font-weight: bold; color: #333; margin-bottom: 15px; }
+    .entry-stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); gap: 10px; margin-bottom: 20px; }
+    .stat { background: white; padding: 12px; border-radius: 10px; text-align: center; font-weight: 600; }
+    .entry-actions { display: flex; gap: 10px; }
+    .btn-small { padding: 8px 16px; font-size: 14px; border-radius: 8px; cursor: pointer; border: none; }
+    .edit-btn { background: #28a745; color: white; }
+    .delete-btn { background: #dc3545; color: white; }
+    .hidden { display: none !important; }
+    .no-entries { text-align: center; color: #666; font-style: italic; padding: 40px; }
+    
+    /* Responsive */
+    @media (max-width: 768px) { 
+        .auth-container { flex-direction: column; }
+        .study-form { grid-template-columns: 1fr; }
+        canvas, svg { height: 300px !important; } /* 🚀 Mobile chart fix */
+    }
+</style>
+    
 </head>
 <body>
 
