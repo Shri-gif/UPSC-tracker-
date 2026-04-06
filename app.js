@@ -88,26 +88,21 @@ function generateAnalytics(entries) {
 
   if (weeklyChart) weeklyChart.destroy();
   weeklyChart = new Chart(ctx, {
-  type: 'line',
-  data: {
-    labels: labels,
-    datasets: [{
-      label: 'Study Hours',
-      data: data,
-      borderWidth: 2
-    }]
-  },
-  options: {
-    responsive: true,
-    maintainAspectRatio: false,
-    scales: {
-      y: {
-        beginAtZero: true
-      }
-    }
-  }
+type: 'line',
+data: {
+labels,
+datasets: [{
+label: 'Study Hours',
+data,
+borderWidth: 2
+}]
+},
+options: {
+responsive: true,
+maintainAspectRatio: false
+}
 });
-} 
+}
 async function handleLogin(e) {
   e.preventDefault();
   const email = document.getElementById('loginEmail').value;
