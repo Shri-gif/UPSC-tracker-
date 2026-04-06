@@ -100,11 +100,14 @@ function generateAnalytics(entries) {
     }, 
     options: {
     responsive: true,
-    maintainAspectRatio: false
+    maintainAspectRatio: false, 
+      scales: {
+        y: {
+            beginAtZero: true,
+        }
+      }
     } 
   });
-}
-
 async function handleLogin(e) {
   e.preventDefault();
   const email = document.getElementById('loginEmail').value;
