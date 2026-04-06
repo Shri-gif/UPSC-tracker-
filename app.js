@@ -135,7 +135,6 @@ weeklyChart = new Chart(ctx, {
     scales: {
       y: {
         beginAtZero: true, 
-        position: 'left' 
       },
    }
  }
