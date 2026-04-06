@@ -123,11 +123,7 @@ canvas {
     <div style="margin-bottom: 10px;">
     <a href="index.html">Home</a>
     <h3 style="margin-top:20px;">📊 Reports</h3>
-    <div id="reportsSection">
-    <div class="chart-box">
-    <canvas id="trendChart"></canvas>
-               </div> 
-    <!-- LEFT SIDE -->
+    <div id="reportsSection">    
     <div>
         <h1 style="margin:0;">📚 UPSC Study Tracker</h1>
         <p style="margin: 2px 0 0; font-size: 13px; opacity: 0.8;">
@@ -140,8 +136,10 @@ canvas {
         <span id="userEmail" style="margin-right: 15px; font-weight: 600;"></span>     
         <button class="btn-small" onclick="logout()">🚪 Logout</button>
     </div>
-
 </div>
+        <div class="chart-box">
+    <canvas id="trendChart"></canvas>
+               </div>  
 
             <form id="addForm" class="study-form">
                 <div class="form-group">
