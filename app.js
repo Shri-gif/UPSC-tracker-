@@ -100,12 +100,6 @@ borderWidth: 2
 options: {
 responsive: true,
 maintainAspectRatio: false
-  scales: {
-    y: {
-      beginAtZero: true,
-      min: 0   // 🔥 IMPORTANT LINE
-    }
-  }
 }
 });
 }
