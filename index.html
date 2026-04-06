@@ -55,27 +55,24 @@
         .delete-btn { background: #dc3545; color: white; }
         .hidden { display: none !important; }
         .no-entries { text-align: center; color: #666; font-style: italic; padding: 40px; }
-         .chart-box {
-    width: 100%;
-    max-width: 500px;
-    margin: 25px auto; /* ✅ Extra spacing */
-    background: white;
-    padding: 20px;
-    border-radius: 15px;
-    box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+        .chart-box {
+  width: 100%;
+  max-width: 500px;
+  margin: 20px auto;
+  background: white;
+  padding: 15px;
+  border-radius: 15px;
 }
 
-canvas {
-    width: 100% !important;
-    height: 280px !important;
-    max-width: 100% !important;
-    position: relative !important; /* ✅ Safe for Chart.js */
+         canvas {
+  width: 100% !important;
+  height: 250px !important;
 }
-         @media (max-width: 768px) { 
-    .auth-container { flex-direction: column; }
-    .study-form { grid-template-columns: 1fr; }
-    canvas { height: 250px !important;} 
-         }
+           @media (max-width: 768px) {
+  .auth-container {
+    flex-direction: column;
+  }
+}
     </style>  
     
 </head>
@@ -83,8 +80,6 @@ canvas {
 
     <nav class="navbar">
         <div class="nav-container">
-            <a href="#" onclick="showDashboard()">Dashboard</a>
-            <a href="#" onclick="showReports()">Reports</a>
             <a href="index.html" class="nav-logo">             
                 <h2>📚 UPSC Tracker</h2>
             </a>
