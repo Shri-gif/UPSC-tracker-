@@ -144,8 +144,9 @@ weeklyChart = new Chart(ctx, {
       grid: {
         drawOnChartArea: false
       } 
-    }
-  }
+     } 
+   }
+ }
 });
 } 
 async function handleLogin(e) {
