@@ -97,7 +97,11 @@ function generateAnalytics(entries) {
         data,
         borderWidth: 2
       }]
-    }
+    }, 
+    options: {
+    responsive: true,
+    maintainAspectRatio: false
+    } 
   });
 }
 
