@@ -131,6 +131,9 @@ canvas {
         <button class="btn-small" onclick="logout()">🚪 Logout</button>
     </div>
     </div> 
+               <div class="chart-box">
+               <canvas id="trendChart"></canvas>
+               </div>  
 
          <form id="addForm" class="study-form">
                 <div class="form-group">
@@ -165,9 +168,6 @@ canvas {
                 <button type="button" class="btn-small" onclick="resetForm()" style="width: auto; background: #6c757d;">🔄 Reset</button>
             </form>
              <h3 style="margin-top:20px;">📊 Analytics</h3>
-               <div class="chart-box">
-               <canvas id="trendChart"></canvas>
-               </div>  
              <canvas id="weeklyChart"></canvas>
             <div id="dataList" class="entries-list">
                 <div class="no-entries">Login to see your study sessions! 🎯</div>
