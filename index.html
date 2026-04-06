@@ -14,8 +14,44 @@
             padding: 20px; 
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             min-height: 100vh;
+            overflow-x: hidden;
         }
-        .container { background: white; border-radius: 20px; padding: 30px; box-shadow: 0 20px 40px rgba(0,0,0,0.1); }
+        .container { background: white; 
+                    border-radius: 20px; 
+                    padding: 30px; 
+                    box-shadow: 0 20px 40px rgba(0,0,0,0.1); 
+                   position: relative;
+                   }
+         
+         .chart-box {
+        width: 100%;
+        max-width: 500px;
+        margin: 20px auto;
+        background: white;
+        padding: 20px;
+        border-radius: 15px;
+        box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        position: relative; /* ✅ This fixes overlap */
+        z-index: 1;
+    }
+    
+    /* ✅ Canvas - Chart.js safe */
+    canvas {
+        width: 100% !important;
+        height: 300px !important;
+        max-height: 300px !important;
+        position: relative !important;
+    }
+    
+    /* ✅ Section spacing - No overlap */
+    .study-form {
+        margin-top: 25px;
+        margin-bottom: 25px;
+    }
+    
+    .entries-list {
+        margin-top: 20px;
+    }
         h1 { text-align: center; color: #333; margin-bottom: 30px; }
         .auth-container { display: flex; gap: 30px; margin-bottom: 30px; }
         .auth-form { flex: 1; background: #f8f9fa; padding: 25px; border-radius: 15px; }
@@ -50,18 +86,6 @@
         .hidden { display: none !important; }
         .no-entries { text-align: center; color: #666; font-style: italic; padding: 40px; }
         @media (max-width: 768px) { .auth-container { flex-direction: column; } }
-         .chart-box {
-  width: 100%;
-  max-width: 500px;
-  margin: 20px auto;
-  background: white;
-  padding: 15px;
-  border-radius: 15px;
- } 
-canvas {
-  width: 100% !important;
-  height: 250px !important;
-         }
     </style>  
     
 </head>
