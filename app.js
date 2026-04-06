@@ -95,10 +95,7 @@ weeklyChart = new Chart(ctx, {
       {
     label: 'Total',
     data: data,
-    borderWidth: 4,
-    bordercolor: 'black', 
-    background: 'black', 
-    tension: 0.3
+    borderWidth: 4
   },
       {
         label: 'GS',
