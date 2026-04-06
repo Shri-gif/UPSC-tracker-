@@ -87,22 +87,53 @@ function generateAnalytics(entries) {
   if (!ctx) return; // 💥 crash protection
 
   if (weeklyChart) weeklyChart.destroy();
-  weeklyChart = new Chart(ctx, {
-type: 'line',
-data: {
-labels,
-datasets: [{
-label: 'Study Hours',
-data,
-borderWidth: 2
-}]
-},
-options: {
-responsive: true,
-maintainAspectRatio: false
-}
+weeklyChart = new Chart(ctx, {
+  type: 'line',
+  data: {
+    labels: labels,
+    datasets: [
+      {
+        label: 'GS',
+        data: last7.map(e => e.gsHours),
+        borderWidth: 2
+      },
+      {
+        label: 'CSAT',
+        data: last7.map(e => e.csatHours),
+        borderWidth: 2
+      },
+      {
+        label: 'Optional',
+        data: last7.map(e => e.optionalHours),
+        borderWidth: 2
+      },
+      {
+        label: 'Current Affairs',
+        data: last7.map(e => e.currentAffairs),
+        borderWidth: 2
+      },
+      {
+        label: 'Revision',
+        data: last7.map(e => e.revisionHours),
+        borderWidth: 2
+      },
+      {
+        label: 'Mock',
+        data: last7.map(e => e.mockHours),
+        borderWidth: 2
+      }
+    ]
+  },
+  options: {
+    responsive: true,
+    maintainAspectRatio: false,
+    scales: {
+      y: {
+        beginAtZero: true
+      }
+    }
+  }
 });
-}
 async function handleLogin(e) {
   e.preventDefault();
   const email = document.getElementById('loginEmail').value;
