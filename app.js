@@ -196,3 +196,42 @@ window.logout = signOut;
 window.resetForm = resetForm;
 
 document.addEventListener('DOMContentLoaded', init);
+
+// ================= NEWS FEATURE =================
+document.addEventListener('DOMContentLoaded', () => {
+  loadNews();
+});
+async function loadNews() {
+  const { data, error } = await supabase
+    .from('news')
+    .select('*')
+    .order('created_at', { ascending: false });
+
+  if (error) {
+    console.log(error);
+    return;
+  }
+
+  displayNews(data);
+}
+
+function displayNews(newsList) {
+  const container = document.getElementById("news-container");
+
+  if (!container) return; // important safety
+
+  container.innerHTML = "";
+
+  newsList.forEach(item => {
+    const div = document.createElement("div");
+
+    div.innerHTML = `
+      <h3>${item.title}</h3>
+      <p>${item.summary}</p>
+      <a href="${item.link}" target="_blank">Read more</a>
+      <hr/>
+    `;
+
+    container.appendChild(div);
+  });
+}
