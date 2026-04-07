@@ -87,6 +87,8 @@
     </nav>
     
     <div class="container">
+        <h2>📰 Current Affairs</h2>
+        <div id="news-container"></div>
         <!-- AUTH SECTION -->
         <div id="authSection">
             <h1>🔐 UPSC Tracker Login</h1>
@@ -186,5 +188,44 @@
     <!-- 🔥 CRITICAL: These script tags MUST be present -->
     <script type="module" src="db.js"></script>
     <script type="module" src="app.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
+    <script>
+const supabase = supabase.createClient(
+  "https://gpcbkguyrkluazkznybf.supabase.co",
+  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImdwY2JrZ3V5cmtsdWF6a3pueWJmIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzUwNzMwMTIsImV4cCI6MjA5MDY0OTAxMn0.NqG6ggDw2xV2mHv1B0HB78c6Td-xMgOCtGTNnpgMatw"
+);
+    </script> 
+    <script>
+async function loadNews() {
+  const { data, error } = await supabase
+    .from('news')
+    .select('*')
+    .order('created_at', { ascending: false });
+
+  const container = document.getElementById('news-container');
+
+  if (error) {
+    container.innerHTML = "❌ Error loading news";
+    console.log(error);
+    return;
+  }
+
+  if (!data || data.length === 0) {
+    container.innerHTML = "No news available";
+    return;
+  }
+
+  container.innerHTML = data.map(item => `
+    <div style="background:#f1f1f1; padding:12px; margin-bottom:10px; border-radius:10px;">
+      <h4>${item.title}</h4>
+      <p>${item.summary}</p>
+      <a href="${item.link}" target="_blank">Read more</a>
+    </div>
+  `).join('');
+}
+
+// 🔥 IMPORTANT: function call
+loadNews();
+        </script>
 </body>
 </html>
