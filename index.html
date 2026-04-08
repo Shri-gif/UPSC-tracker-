@@ -80,6 +80,9 @@
   gap: 10px;
   margin-top: 10px;
          }
+  #home {
+  display: block;
+         }
     </style>  
     
 </head>
@@ -164,6 +167,11 @@
      <h3>📅 Study History</h3>
    <div id="historyList"></div>
        </div>
+  <div id="current" class="tab-content">
+  <h2>📰 Current Affairs</h2>
+  <div id="news-container"></div>
+            </div>
+            
             <div id="add" class="tab-content">
               <form id="addForm" class="study-form">
                 <div class="form-group">
@@ -207,5 +215,51 @@
     <!-- 🔥 CRITICAL: These script tags MUST be present -->
     <script type="module" src="db.js"></script>
     <script type="module" src="app.js"></script>
+
+    <script>
+async function loadNews() {
+  const { data, error } = await supabaseClient
+    .from('news')
+    .select('*')
+    .order('created_at', { ascending: false });
+
+  const container = document.getElementById('news-container');
+
+  if (!container) return;
+
+  if (error) {
+    container.innerHTML = "❌ Error loading news";
+    console.log(error);
+    return;
+  }
+
+  if (!data || data.length === 0) {
+    container.innerHTML = "No news available";
+    return;
+  }
+
+  container.innerHTML = data.map(item => `
+    <div style="background:#f1f1f1; padding:12px; margin-bottom:10px; border-radius:10px;">
+      <h4>${item.title || item.source}</h4>
+      <p>${item.summary || "No summary available"}</p>
+      <small>${item.created_at}</small><br>
+      <a href="${item.link}" target="_blank">Read more</a>
+    </div>
+  `).join('');
+}
+        function showTab(tabId) {
+  const tabs = document.querySelectorAll(".tab-content");
+
+  tabs.forEach(tab => {
+    tab.style.display = "none";
+  });
+
+  const activeTab = document.getElementById(tabId);
+  if (activeTab) {
+    activeTab.style.display = "block";
+  }
+        }
+    </script>
+    
 </body>
 </html>
