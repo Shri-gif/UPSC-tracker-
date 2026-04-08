@@ -134,9 +134,21 @@
 
     
     <div id="home" class="tab-content">
+        <div class="dashboard-header">
+        <div>
+        <a href="index.html">Home</a>
+            <h1 style="margin:0;">📚 UPSC Study Tracker</h1>
+            <p style="margin: 2px 0 0; font-size: 13px; opacity: 0.8;">
+                by Srivi 🚀
+            </p>
+        </div>
+        <div>
+            <span id="userEmail" style="margin-right: 15px; font-weight: 600;"></span>     
+            <button class="btn-small" onclick="logout()">🚪 Logout</button>
+        </div>
+        </div> 
     <h2>Welcome 👋</h2>
     <p>Stay consistent, success is coming 🚀</p>
-    
     <div style="margin-top:20px;">
         <h3>💡 Motivation</h3>
         <p>"Discipline is choosing between what you want now and what you want most."</p>
@@ -145,8 +157,7 @@
     </div>
     </div>
 
-<div id="current" class="tab-content"
-    style="display:none;">
+<div id="current" class="tab-content">
   <h2>Current Affairs</h2>
   <div id="news-container"></div>
 </div>
@@ -237,20 +248,6 @@
             </div>
         </div>
 
-        <!-- DASHBOARD SECTION -->
-        <div class="dashboard-header">
-        <div>
-            <a href="index.html">Home</a>
-            <h1 style="margin:0;">📚 UPSC Study Tracker</h1>
-            <p style="margin: 2px 0 0; font-size: 13px; opacity: 0.8;">
-                by Srivi 🚀
-            </p>
-        </div>
-        <div>
-            <span id="userEmail" style="margin-right: 15px; font-weight: 600;"></span>     
-            <button class="btn-small" onclick="logout()">🚪 Logout</button>
-        </div>
-    </div>
         
     <script>
 function showTab(tabId) {
