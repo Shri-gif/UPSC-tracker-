@@ -74,15 +74,35 @@
   }
  
     }
-  .nav-buttons {
+.tab-content {
+  display: none;
+  width: 100%;
+}
+
+#home {
+  display: block;
+}
+
+/* FIX ALIGNMENT */
+#current, #add, #analytics {
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+/* News cards fix */
+#news-container div {
+  background: #f1f1f1;
+  padding: 12px;
+  margin-bottom: 10px;
+  border-radius: 10px;
+}
+
+/* Form full width */
+.study-form {
   display: flex;
   flex-direction: column;
-  gap: 10px;
-  margin-top: 10px;
-         }
-  #home {
-  display: block;
-         }
+  gap: 15px;
+}
     </style>  
     
 </head>
