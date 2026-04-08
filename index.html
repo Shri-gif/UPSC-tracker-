@@ -98,6 +98,12 @@
     border-radius: 8px;
     font-size: 12px;
 }
+#currentAffairsSection,
+#analyticsSection,
+#addStudySection,
+#historySection {
+  display: none;
+}
     </style>  
     
 </head>
@@ -118,6 +124,7 @@
   <button onclick="showTab('add')">Add Study</button>
   <button onclick="showTab('history')">History</button>
 </div>
+
     
     <div id="home" class="tab-content">
     <h2>Welcome 👋</h2>
@@ -129,16 +136,16 @@
         <p>"Every day counts. Don't break the chain."</p>
         <p>“You don’t have to be great to start, but you have to start to be great.”</p>
     </div>
-</div>
+    </div>
 
-<div id="current" class="tab-content">
-    <style="display:none;">
+<div id="current" class="tab-content"
+    style="display:none;">
   <h2>Current Affairs</h2>
   <div id="news-container"></div>
 </div>
 
-    <div id="analytics" class="tab-content">
-        <style="display:none;">
+    <div id="analytics" class="tab-content"
+        style="display:none;">
    <h3 style="margin-top:20px;">📊 Analytics</h3>
         <div class="chart-box">
     <canvas id="trendChart"></canvas>
@@ -146,8 +153,8 @@
               
 </div>
 
-<div id="add" class="tab-content">
-    <style="display:none;">
+<div id="add" class="tab-content"
+    style="display:none;">
   <h2>➕ Add Study</h2
       <form id="addForm" class="study-form">
                 <div class="form-group">
@@ -183,8 +190,8 @@
          </form>           
 </div>
 
-<div id="history" class="tab-content">
-        <style="display:none;">
+<div id="history" class="tab-content"
+        style="display:none;">
     <h2>📅 Study History</h2>
     <div id="historyList"></div>
 </div>
