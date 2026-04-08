@@ -96,6 +96,18 @@
   margin-bottom: 10px;
   border-radius: 10px;
 }
+         #news-container {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  width: 100%;
+         }
+         #news-container div {
+  background: #f8f9fa;
+  padding: 15px;
+  border-radius: 12px;
+  color: #333;
+         }
 
 /* Form full width */
 .study-form {
@@ -177,7 +189,7 @@
         <span id="userEmail" style="margin-right: 15px; font-weight: 600;"></span>     
         <button class="btn-small" onclick="logout()">🚪 Logout</button>
     </div>
-
+        </div>
         
        <div id="analytics" class="tab-content">
         <h3 style="margin-top:20px;">📊 Analytics</h3>
@@ -230,7 +242,7 @@
             </div>
             </div>
         </div>
-    </div>
+    
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <!-- 🔥 CRITICAL: These script tags MUST be present -->
     <script type="module" src="db.js"></script>
