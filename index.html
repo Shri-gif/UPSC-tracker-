@@ -156,10 +156,10 @@
    <h3 style="margin-top:20px;">📊 Analytics</h3>
         <div class="chart-box">
     <canvas id="trendChart"></canvas>
+            <div id="dataList" class="entries-list">
             <h3 style="margin-top:30px;">📅 Study History</h3>
 <div id="historyList"></div>
-</div>
-              
+     </div>          
 </div>
 
 <div id="add" class="tab-content"
@@ -239,25 +239,19 @@
 
         <!-- DASHBOARD SECTION -->
         <div class="dashboard-header">
-            <div>
-        <a href="index.html">Home</a>
-        <h1 style="margin:0;">📚 UPSC Study Tracker</h1>
-        <p style="margin: 2px 0 0; font-size: 13px; opacity: 0.8;">
-            by Srivi 🚀
-        </p>
-            </div>
-            <div>
-        <span id="userEmail" style="margin-right: 15px; font-weight: 600;"></span>     
-        <button class="btn-small" onclick="logout()">🚪 Logout</button>
-    </div>
-
+        <div>
+            <a href="index.html">Home</a>
+            <h1 style="margin:0;">📚 UPSC Study Tracker</h1>
+            <p style="margin: 2px 0 0; font-size: 13px; opacity: 0.8;">
+                by Srivi 🚀
+            </p>
         </div>
-
-            <div id="dataList" class="entries-list">
-                <div class="no-entries">Login to see your study sessions! 🎯</div>
-            </div>
+        <div>
+            <span id="userEmail" style="margin-right: 15px; font-weight: 600;"></span>     
+            <button class="btn-small" onclick="logout()">🚪 Logout</button>
         </div>
     </div>
+        
     <script>
 function showTab(tabId) {
   const tabs = document.querySelectorAll(".tab-content");
