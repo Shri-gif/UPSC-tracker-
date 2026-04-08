@@ -325,12 +325,13 @@ async function loadNews() {
   }
 
   container.innerHTML = data.map(item => `
-    <div style="background:#f1f1f1; padding:12px; margin-bottom:10px; border-radius:10px;">
-      <h4>${item.title}</h4>
-      <p>${item.summary}</p>
-      <a href="${item.link}" target="_blank">Read more</a>
-    </div>
-  `).join('');
+  <div style="background:#f1f1f1; padding:12px; margin-bottom:10px; border-radius:10px;">
+    <h4>${item.title || item.source}</h4>
+    <p>${item.summary || "No summary available"}</p>
+    <small>${item.created_at}</small><br>
+    <a href="${item.link}" target="_blank">Read more</a>
+  </div>
+`).join('');
 }
 
 // 🔥 IMPORTANT: function call
