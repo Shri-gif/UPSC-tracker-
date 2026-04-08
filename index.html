@@ -4,8 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>UPSC Tracker - Supabase</title>
-    
-     <style>
+    <style>
+        /* Aapka existing CSS same rahega */
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body { 
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
@@ -16,12 +16,7 @@
             min-height: 100vh;
             overflow-x: hidden;
         }
-        .container { background: white; 
-                    border-radius: 20px; 
-                    padding: 30px; 
-                    box-shadow: 0 20px 40px rgba(0,0,0,0.1); 
-                   }
-         
+        .container { background: white; border-radius: 20px; padding: 30px; box-shadow: 0 20px 40px rgba(0,0,0,0.1); }
         h1 { text-align: center; color: #333; margin-bottom: 30px; }
         .auth-container { display: flex; gap: 30px; margin-bottom: 30px; }
         .auth-form { flex: 1; background: #f8f9fa; padding: 25px; border-radius: 15px; }
@@ -42,139 +37,99 @@
         }
         .study-form { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px; margin-bottom: 30px; }
         .entries-list { display: grid; gap: 20px; }
-        .entry-card { 
-            background: #f8f9fa; border-radius: 15px; padding: 25px; 
-            border-left: 5px solid #667eea; box-shadow: 0 5px 15px rgba(0,0,0,0.08);
-        }
-        .entry-date { font-size: 24px; font-weight: bold; color: #333; margin-bottom: 15px; }
-        .entry-stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); gap: 10px; margin-bottom: 20px; }
-        .stat { background: white; padding: 12px; border-radius: 10px; text-align: center; font-weight: 600; }
-        .entry-actions { display: flex; gap: 10px; }
+        .entry-card { background: #f8f9fa; border-radius: 15px; padding: 25px; border-left: 5px solid #667eea; box-shadow: 0 5px 15px rgba(0,0,0,0.08); }
+        .hidden { display: none !important; }
+        .no-entries { text-align: center; color: #666; font-style: italic; padding: 40px; }
+        .chart-box { width: 100%; max-width: 500px; margin: 20px auto; background: white; padding: 15px; border-radius: 15px; }
+        canvas { width: 100% !important; height: 250px !important; }
         .btn-small { padding: 8px 16px; font-size: 14px; border-radius: 8px; cursor: pointer; border: none; }
         .edit-btn { background: #28a745; color: white; }
         .delete-btn { background: #dc3545; color: white; }
-        .hidden { display: none !important; }
-        .no-entries { text-align: center; color: #666; font-style: italic; padding: 40px; }
-        .chart-box {
-  width: 100%;
-  max-width: 500px;
-  margin: 20px auto;
-  background: white;
-  padding: 15px;
-  border-radius: 15px;
-}
-
-         canvas {
-  width: 100% !important;
-  height: 250px !important;
-}
-           @media (max-width: 768px) {
-  .auth-container {
-    flex-direction: column;
-  }
-}
-         .history-card {
-    background: #fff;
-    padding: 12px;
-    margin: 10px 0;
-    border-radius: 12px;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-}
-
-.history-date {
-    font-weight: bold;
-    margin-bottom: 8px;
-}
-
-.history-items {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 8px;
-}
-
-.history-item {
-    background: #f1f1f1;
-    padding: 6px 10px;
-    border-radius: 8px;
-    font-size: 12px;
-}
-#currentAffairsSection,
-#analyticsSection,
-#addStudySection,
-#historySection {
-  display: none;
-}
-         .tab-content {
-  display: none;
-}
-#home {
-  display: block;
-         }
-
+        .tab-content { display: none; }
+        #home { display: block; }
+        .navbar { 
+            background: white; 
+            padding: 15px 30px; 
+            border-radius: 15px; 
+            margin-bottom: 20px; 
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            display: flex; 
+            gap: 15px; 
+            justify-content: center;
+        }
+        .navbar button { 
+            background: linear-gradient(45deg, #667eea, #764ba2); 
+            color: white; 
+            border: none; 
+            padding: 12px 24px; 
+            border-radius: 25px; 
+            cursor: pointer; 
+            font-weight: 600;
+        }
+        .navbar button:hover { transform: translateY(-2px); }
+        .history-card {
+            background: #fff;
+            padding: 12px;
+            margin: 10px 0;
+            border-radius: 12px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+        .history-date { font-weight: bold; margin-bottom: 8px; }
+        .history-items { display: flex; flex-wrap: wrap; gap: 8px; }
+        .history-item { background: #f1f1f1; padding: 6px 10px; border-radius: 8px; font-size: 12px; }
+        .success-msg { background: #d4edda; color: #155724; padding: 12px; border-radius: 8px; margin: 10px 0; }
     </style>  
-    
 </head>
 <body>
-
-    <nav class="navbar">
-        <div class="nav-container">
-            <a href="index.html" class="nav-logo">             
-                <h2>📚 UPSC Tracker</h2>
-            </a>
-        </div>
+    <!-- Navigation -->
+    <nav class="navbar" id="navbar" style="display: none;">
+        <button onclick="showTab('home')">🏠 Home</button>
+        <button onclick="showTab('analytics')">📊 Analytics</button>
+        <button onclick="showTab('current')">📰 Current Affairs</button>
+        <button onclick="showTab('add')">➕ Add Study</button> 
     </nav>
-    
-    <div class="navbar">
-  <button onclick="showTab('home')">Home</button>
-  <button onclick="showTab('analytics')">Analytics</button>
-  <button onclick="showTab('current')">Current Affairs</button>
-  <button onclick="showTab('add')">Add Study</button> 
-</div>
 
-    
-    <div id="home" class="tab-content">
-        <div class="dashboard-header">
-        <div>
-        <a href="index.html">Home</a>
-            <h1 style="margin:0;">📚 UPSC Study Tracker</h1>
-            <p style="margin: 2px 0 0; font-size: 13px; opacity: 0.8;">
-                by Srivi 🚀
-            </p>
+    <!-- Dashboard Content -->
+    <div class="container" id="dashboard" style="display: none;">
+        <div id="home" class="tab-content">
+            <div class="dashboard-header">
+                <div>
+                    <h1 style="margin:0;">📚 UPSC Study Tracker</h1>
+                    <p style="margin: 2px 0 0; font-size: 13px; opacity: 0.8;">by Srivi 🚀</p>
+                </div>
+                <div>
+                    <span id="userEmail" style="margin-right: 15px; font-weight: 600;"></span>     
+                    <button class="btn-small" onclick="logout()">🚪 Logout</button>
+                </div>
+            </div> 
+            <h2>Welcome 👋</h2>
+            <p>Stay consistent, success is coming 🚀</p>
+            <div style="margin-top:20px;">
+                <h3>💡 Motivation</h3>
+                <p>"Discipline is choosing between what you want now and what you want most."</p>
+            </div>
         </div>
-        <div>
-            <span id="userEmail" style="margin-right: 15px; font-weight: 600;"></span>     
-            <button class="btn-small" onclick="logout()">🚪 Logout</button>
+
+        <div id="current" class="tab-content">
+            <h2>📰 Current Affairs</h2>
+            <div id="news-container">Loading...</div>
         </div>
-        </div> 
-    <h2>Welcome 👋</h2>
-    <p>Stay consistent, success is coming 🚀</p>
-    <div style="margin-top:20px;">
-        <h3>💡 Motivation</h3>
-        <p>"Discipline is choosing between what you want now and what you want most."</p>
-        <p>"Every day counts. Don't break the chain."</p>
-        <p>“You don’t have to be great to start, but you have to start to be great.”</p>
-    </div>
-    </div>
 
-<div id="current" class="tab-content">
-  <h2>Current Affairs</h2>
-  <div id="news-container"></div>
-</div>
+        <div id="analytics" class="tab-content">
+            <h3>📊 Analytics</h3>
+            <div class="chart-box">
+                <canvas id="trendChart"></canvas>
+            </div>
+            <div id="dataList">
+                <h3>📅 Study History</h3>
+                <div id="historyList"></div>
+            </div>          
+        </div>
 
-    <div id="analytics" class="tab-content"
-        style="display:none;">
-   <h3 style="margin-top:20px;">📊 Analytics</h3>
-        <div class="chart-box">
-    <canvas id="trendChart"></canvas>
-            <div id="dataList" class="entries-list">
-     <h3 style="margin-top:30px;">📅 Study History</h3>
-<div id="historyList"></div>
-     </div>          
-</div>
-
-<div id="add" class="tab-content"> 
-  <h2>➕ Add Study</h2>
-      <form id="addForm" class="study-form">
+        <div id="add" class="tab-content"> 
+            <h2>➕ Add Study Session</h2>
+            <div id="successMsg" class="success-msg hidden"></div>
+            <form id="addForm" class="study-form">
                 <div class="form-group">
                     <label>📅 Date</label>
                     <input type="date" id="entryDate" required>
@@ -203,147 +158,217 @@
                     <label>📝 Mock Test</label>
                     <input type="number" id="mockHours" step="0.5" min="0" placeholder="0">
                 </div>
-                <button type="submit">➕ Add Study Session</button>
+                <button type="submit">✅ Save Study Session</button>
                 <button type="button" class="btn-small" onclick="resetForm()" style="width: auto; background: #6c757d;">🔄 Reset</button>
-         </form>           
-</div>
+            </form>           
+        </div>
+    </div>
 
-        <!-- AUTH SECTION -->
-        <div id="authSection">
-            <h1>🔐 UPSC Tracker Login</h1>
-            <p style="margin: 5px 0 20px; font-size: 13px; opacity: 0.7; letter-spacing: 1px; text-align:center;">
-             by Srivi 🚀
-            </p> 
-            <div class="auth-container">
-                <div class="auth-form">
-                    <h3>📧 Login</h3>
-                    <form id="loginForm">
-                        <div class="form-group">
-                            <label>Email</label>
-                            <input type="email" id="loginEmail" placeholder="your@email.com" required>
-                        </div>
-                        <div class="form-group">
-                            <label>Password</label>
-                            <input type="password" id="loginPassword" placeholder="Password" required>
-                        </div>
-                        <button type="submit">🚀 Login</button>
-                    </form> 
-                </div>
-                <div class="auth-form">
-                    <h3>✨ Sign Up</h3>
-                    <form id="signupForm">
-                        <div class="form-group">
-                            <label>Email</label>
-                            <input type="email" id="signupEmail" placeholder="your@email.com" required>
-                        </div>
-                        <div class="form-group">
-                            <label>Password</label>
-                            <input type="password" id="signupPassword" placeholder="6+ characters" required>
-                        </div>
-                        <button type="submit">📝 Create Account</button>
-                    </form>
-                </div>
+    <!-- AUTH SECTION -->
+    <div id="authSection" class="container">
+        <h1>🔐 UPSC Tracker Login</h1>
+        <p style="margin: 5px 0 20px; font-size: 13px; opacity: 0.7; letter-spacing: 1px; text-align:center;">
+            by Srivi 🚀
+        </p> 
+        <div class="auth-container">
+            <div class="auth-form">
+                <h3>📧 Login</h3>
+                <form id="loginForm">
+                    <div class="form-group">
+                        <label>Email</label>
+                        <input type="email" id="loginEmail" placeholder="your@email.com" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Password</label>
+                        <input type="password" id="loginPassword" placeholder="Password" required>
+                    </div>
+                    <button type="submit">🚀 Login</button>
+                </form> 
+            </div>
+            <div class="auth-form">
+                <h3>✨ Sign Up</h3>
+                <form id="signupForm">
+                    <div class="form-group">
+                        <label>Email</label>
+                        <input type="email" id="signupEmail" placeholder="your@email.com" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Password</label>
+                        <input type="password" id="signupPassword" placeholder="6+ characters" required>
+                    </div>
+                    <button type="submit">📝 Create Account</button>
+                </form>
             </div>
         </div>
+    </div>
 
-        
-    <script>
-function showTab(tabId) {
-  const tabs = document.querySelectorAll(".tab-content");
-  tabs.forEach(tab => tab.style.display = "none");
-
-  document.getElementById(tabId).style.display = "block";
-
-  if (tabId === "analytics") { 
-      loadHistory();
-  }
-}
-    </script>
-    
-<script>
-async function loadHistory() {
-    const { data, error } = await supabaseClient
-        .from("entries")
-        .select("*")
-        .order("date", { ascending: false });
-
-    const container = document.getElementById("historyList");
-
-if (!container) {
-    console.log("historyList not found");
-    return;
-}
-
-    if (error) {
-        console.log(error);
-        return;
-    }
-
-    data.forEach(entry => {
-        const card = document.createElement("div");
-        card.className = "history-card";
-
-        card.innerHTML = `
-            <div class="history-date">${entry.date}</div>
-            <div class="history-items">
-                <div class="history-item">📖 GS: ${entry.gs}</div>
-                <div class="history-item">🎯 CSAT: ${entry.csat}</div>
-                <div class="history-item">📚 Opt: ${entry.optional}</div>
-                <div class="history-item">📰 CA: ${entry.current}</div>
-                <div class="history-item">🔄 Rev: ${entry.revision}</div>
-                <div class="history-item">📝 Mock: ${entry.mock}</div>
-            </div>
-        `;
-
-        container.appendChild(card);
-    });
-}
-</script>
-    
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <!-- 🔥 CRITICAL: These script tags MUST be present -->
-    <script type="module" src="db.js"></script>
-    <script type="module" src="app.js"></script>
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
+    
     <script>
-const supabaseClient = supabase.createClient(
-  "https://gpcbkguyrkluazkznybf.supabase.co",
-  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImdwY2JrZ3V5cmtsdWF6a3pueWJmIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzUwNzMwMTIsImV4cCI6MjA5MDY0OTAxMn0.NqG6ggDw2xV2mHv1B0HB78c6Td-xMgOCtGTNnpgMatw"
-);
-    </script> 
-    <script>
-async function loadNews() {
-  const { data, error } = await supabaseClient
-    .from('news')
-    .select('*')
-    .order('created_at', { ascending: false });
+        const supabase = supabase.createClient(
+            "https://gpcbkguyrkluazkznybf.supabase.co",
+            "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImdwY2JrZ3V5cmtsdWF6a3pueWJmIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzUwNzMwMTIsImV4cCI6MjA5MDY0OTAxMn0.NqG6ggDw2xV2mHv1B0HB78c6Td-xMgOCtGTNnpgMatw"
+        );
 
-  const container = document.getElementById('news-container');
+        let currentUser = null;
 
-  if (error) {
-    container.innerHTML = "❌ Error loading news";
-      
-    console.log(error);
-    return;
-  }
+        // Check auth state on load
+        supabase.auth.getSession().then(({ data: { session } }) => {
+            if (session) {
+                currentUser = session.user;
+                showDashboard();
+            }
+        });
 
-  if (!data || data.length === 0) {
-    container.innerHTML = "No news available";
-    return;
-  }
+        // Auth listeners
+        supabase.auth.onAuthStateChange((event, session) => {
+            if (event === 'SIGNED_IN') {
+                currentUser = session.user;
+                showDashboard();
+            } else if (event === 'SIGNED_OUT') {
+                currentUser = null;
+                showAuth();
+            }
+        });
 
-  container.innerHTML = data.map(item => `
-  <div style="background:#f1f1f1; padding:12px; margin-bottom:10px; border-radius:10px;">
-    <h4>${item.title || item.source}</h4>
-    <p>${item.summary || "No summary available"}</p>
-    <small>${item.created_at}</small><br>
-    <a href="${item.link}" target="_blank">Read more</a>
-  </div>
-`).join('');
-}
+        // Show Dashboard
+        function showDashboard() {
+            document.getElementById('authSection').style.display = 'none';
+            document.getElementById('dashboard').style.display = 'block';
+            document.getElementById('navbar').style.display = 'flex';
+            document.getElementById('userEmail').textContent = currentUser.email;
+            showTab('home');
+            loadNews();
+        }
 
-// 🔥 IMPORTANT: function call
-loadNews();
-        </script>
-</body>
-</html>
+        // Show Auth
+        function showAuth() {
+            document.getElementById('authSection').style.display = 'block';
+            document.getElementById('dashboard').style.display = 'none';
+            document.getElementById('navbar').style.display = 'none';
+        }
+
+        // Tab switching
+        function showTab(tabId) {
+            document.querySelectorAll('.tab-content').forEach(tab => {
+                tab.style.display = 'none';
+            });
+            document.getElementById(tabId).style.display = 'block';
+
+            if (tabId === 'analytics') loadHistory();
+            if (tabId === 'current') loadNews();
+        }
+
+        // Login
+        document.getElementById('loginForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const email = document.getElementById('loginEmail').value;
+            const password = document.getElementById('loginPassword').value;
+
+            const { error } = await supabase.auth.signInWithPassword({
+                email,
+                password
+            });
+
+            if (error) alert('Login failed: ' + error.message);
+        });
+
+        // Signup
+        document.getElementById('signupForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const email = document.getElementById('signupEmail').value;
+            const password = document.getElementById('signupPassword').value;
+
+            const { error } = await supabase.auth.signUp({
+                email,
+                password
+            });
+
+            if (error) alert('Signup failed: ' + error.message);
+        });
+
+        // Logout
+        async function logout() {
+            await supabase.auth.signOut();
+        }
+
+        // Add Study Entry
+        document.getElementById('addForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const entry = {
+                date: document.getElementById('entryDate').value,
+                gs: parseFloat(document.getElementById('gsHours').value) || 0,
+                csat: parseFloat(document.getElementById('csatHours').value) || 0,
+                optional: parseFloat(document.getElementById('optionalHours').value) || 0,
+                current: parseFloat(document.getElementById('currentAffairs').value) || 0,
+                revision: parseFloat(document.getElementById('revisionHours').value) || 0,
+                mock: parseFloat(document.getElementById('mockHours').value) || 0,
+                user_id: currentUser.id
+            };
+
+            const { error } = await supabase
+                .from('entries')
+                .insert([entry]);
+
+            if (error) {
+                alert('Error saving: ' + error.message);
+            } else {
+                showSuccess('✅ Study session saved successfully!');
+                resetForm();
+            }
+        });
+
+        function resetForm() {
+            document.getElementById('addForm').reset();
+            document.getElementById('entryDate').valueAsDate = new Date();
+        }
+
+        function showSuccess(msg) {
+            const msgEl = document.getElementById('successMsg');
+            msgEl.textContent = msg;
+            msgEl.classList.remove('hidden');
+            setTimeout(() => msgEl.classList.add('hidden'), 3000);
+        }
+
+        // Load History
+        async function loadHistory() {
+            const { data, error } = await supabase
+                .from("entries")
+                .select("*")
+                .eq('user_id', currentUser.id)
+                .order("date", { ascending: false });
+
+            const container = document.getElementById("historyList");
+            if (!container) return;
+
+            if (error) {
+                container.innerHTML = '<p>Error loading history</p>';
+                return;
+            }
+
+            if (!data || data.length === 0) {
+                container.innerHTML = '<p class="no-entries">No study entries yet. Add your first session! 🚀</p>';
+                return;
+            }
+
+            container.innerHTML = data.map(entry => `
+                <div class="history-card">
+                    <div class="history-date">${entry.date}</div>
+                    <div class="history-items">
+                        <div class="history-item">📖 GS: ${entry.gs}h</div>
+                        <div class="history-item">🎯 CSAT: ${entry.csat}h</div>
+                        <div class="history-item">📚 Opt: ${entry.optional}h</div>
+                        <div class="history-item">📰 CA: ${entry.current}h</div>
+                        <div class="history-item">🔄 Rev: ${entry.revision}h</div>
+                        <div class="history-item">📝 Mock: ${entry.mock}h</div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // Load News
+        async function loadNews() {
+            const {
