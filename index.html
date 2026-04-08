@@ -72,19 +72,35 @@
   .auth-container {
     flex-direction: column;
   }
-}
+ 
+    }
+  .nav-buttons {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-top: 10px;
+         }
     </style>  
     
 </head>
 <body>
 
     <nav class="navbar">
-        <div class="nav-container">
-            <a href="index.html" class="nav-logo">             
-                <h2>📚 UPSC Tracker</h2>
-            </a>
-        </div>
-    </nav>
+  <div class="nav-container">
+
+    <a href="index.html" class="nav-logo">
+      <h2>📚 UPSC Tracker</h2>
+    </a>
+
+    <div class="nav-buttons">   <!-- 🔥 change class -->
+      <button onclick="showTab('home')">Home</button>
+      <button onclick="showTab('analytics')">Analytics</button>
+      <button onclick="showTab('current')">Current Affairs</button>
+      <button onclick="showTab('add')">Add Study</button>
+    </div>
+
+  </div>
+</nav>
     
     <div class="container">
         <!-- AUTH SECTION -->
@@ -139,12 +155,16 @@
         <button class="btn-small" onclick="logout()">🚪 Logout</button>
     </div>
 
-        </div>
+        
+       <div id="analytics" class="tab-content">
         <h3 style="margin-top:20px;">📊 Analytics</h3>
-
 <div class="chart-box">
     <canvas id="trendChart"></canvas>
 </div>
+     <h3>📅 Study History</h3>
+   <div id="historyList"></div>
+       </div>
+            <div id="add" class="tab-content">
               <form id="addForm" class="study-form">
                 <div class="form-group">
                     <label>📅 Date</label>
@@ -176,9 +196,10 @@
                 </div>
                 <button type="submit">➕ Add Study Session</button>
                 <button type="button" class="btn-small" onclick="resetForm()" style="width: auto; background: #6c757d;">🔄 Reset</button>
-         </form>
+              </form>
             <div id="dataList" class="entries-list">
                 <div class="no-entries">Login to see your study sessions! 🎯</div>
+            </div>
             </div>
         </div>
     </div>
