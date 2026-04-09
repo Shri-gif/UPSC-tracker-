@@ -177,8 +177,8 @@
                         <button type="submit">🚀 Login</button>
                     </form> 
                     <p style="text-align:center; margin-top:10px;">
-                  <a href="#" onclick="resetPassword()">Forgot Password?</a>
                     </p>
+                  <button type="button" onclick="resetPassword()">Forgot Password?</button>
                 </div>
                 <div class="auth-form">
                     <h3>✨ Sign Up</h3>
@@ -311,8 +311,16 @@ async function loadNews() {
   if (activeTab) {
     activeTab.style.display = "block";
   }
-        }
-        async function resetPassword() {
+            if (tabId === "current") {
+    loadNews();
+  }
+
+  if (tabId === "analytics") {
+    loadHistory();
+  }
+        } 
+        
+async function resetPassword() {
   const email = document.getElementById("loginEmail").value;
 
   if (!email) {
@@ -320,17 +328,16 @@ async function loadNews() {
     return;
   }
 
-  const { data, error } = await supabaseClient.auth.resetPasswordForEmail(email, {
-    redirectTo: window.location.origin
+  const { error } = await supabase.auth.resetPasswordForEmail(email, {
+    redirectTo: "https://shri-gif.github.io/UPSC-tracker-/"
   });
 
   if (error) {
-    alert("❌ Error: " + error.message);
+    alert("Error: " + error.message);
   } else {
-    alert("✅ Password reset link sent! Check your email 📩");
+    alert("Password reset link sent! Check your email 📩");
   }
-        }
-    </script>
-    
+}        
+    </script>  
 </body>
 </html>
