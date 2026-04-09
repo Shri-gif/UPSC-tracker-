@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Reset Password</title>
+</head>
+<body style="font-family:sans-serif; text-align:center; padding:50px;">
+
+<h2>🔑 Set New Password</h2>
+
+<input type="password" id="newPassword" placeholder="Enter new password" style="padding:10px; width:250px;">
+<br><br>
+<button onclick="updatePassword()" style="padding:10px 20px;">Update Password</button>
+
+<script type="module">
+import { createClient } from "https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm";
+
+const supabase = createClient(
+  "https://gpcbkguyrkluazkznybf.supabase.co",
+  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImdwY2JrZ3V5cmtsdWF6a3pueWJmIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzUwNzMwMTIsImV4cCI6MjA5MDY0OTAxMn0.NqG6ggDw2xV2mHv1B0HB78c6Td-xMgOCtGTNnpgMatw"
+);
+
+async function updatePassword() {
+  const password = document.getElementById("newPassword").value;
+
+  if (!password) {
+    alert("Enter password");
+    return;
+  }
+
+  const { error } = await supabase.auth.updateUser({
+    password: password
+  });
+
+  if (error) {
+    alert("❌ " + error.message);
+  } else {
+    alert("✅ Password updated!");
+    window.location.href = "index.html";
+  }
+}
+
+window.updatePassword = updatePassword;
+</script>
+
+</body>
+</html>
