@@ -29,3 +29,100 @@ export async function getCurrentUser() {
 export function onAuthStateChange(callback) {
   return supabase.auth.onAuthStateChange(callback);
 }
+
+// Reset Password functionality
+document.addEventListener('DOMContentLoaded', function() {
+    const showResetPassword = document.getElementById('showResetPassword');
+    const resetPasswordModal = document.getElementById('resetPasswordModal');
+    const closeResetModal = document.getElementById('closeResetModal');
+    const resetPasswordForm = document.getElementById('resetPasswordForm');
+    const resetEmail = document.getElementById('resetEmail');
+    const resetPasswordBtn = document.getElementById('resetPasswordBtn');
+    const resetMessage = document.getElementById('resetMessage');
+    const backToLogin = document.getElementById('backToLogin');
+
+    // Show Reset Password Modal
+    if (showResetPassword) {
+        showResetPassword.addEventListener('click', function(e) {
+            e.preventDefault();
+            resetPasswordModal.style.display = 'flex';
+        });
+    }
+
+    // Close Modal
+    if (closeResetModal) {
+        closeResetModal.addEventListener('click', function() {
+            resetPasswordModal.style.display = 'none';
+            resetForm();
+        });
+    }
+
+    // Close modal when clicking outside
+    window.addEventListener('click', function(event) {
+        if (event.target === resetPasswordModal) {
+            resetPasswordModal.style.display = 'none';
+            resetForm();
+        }
+    });
+
+    // Back to Login
+    if (backToLogin) {
+        backToLogin.addEventListener('click', function(e) {
+            e.preventDefault();
+            resetPasswordModal.style.display = 'none';
+            resetForm();
+        });
+    }
+
+    // Reset Password Form Submit
+    if (resetPasswordForm) {
+        resetPasswordForm.addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            const email = resetEmail.value.trim();
+            
+            if (!email) {
+                showMessage('Email address enter karein!', 'error');
+                return;
+            }
+
+            // Disable button
+            resetPasswordBtn.disabled = true;
+            resetPasswordBtn.textContent = 'Bhej raha hun...';
+
+            try {
+                // Supabase se reset password request
+                const { data, error } = await supabase.auth.resetPasswordForEmail(email, {
+                    redirectTo: `${window.location.origin}/update-password.html` // Ye page banayenge
+                });
+
+                if (error) {
+                    console.error('Reset password error:', error);
+                    showMessage(error.message || 'Kuch galat ho gaya! Email check karein.', 'error');
+                } else {
+                    showMessage('Password reset link aapke email pe bhej diya gaya! Check karein inbox ya spam folder.', 'success');
+                    resetForm();
+                }
+            } catch (err) {
+                console.error('Reset password error:', err);
+                showMessage('Network error! Internet connection check karein.', 'error');
+            } finally {
+                // Re-enable button
+                resetPasswordBtn.disabled = false;
+                resetPasswordBtn.textContent = 'Reset Password Link Bhejo';
+            }
+        });
+    }
+
+    // Helper functions
+    function showMessage(message, type) {
+        resetMessage.textContent = message;
+        resetMessage.className = `message ${type}`;
+    }
+
+    function resetForm() {
+        resetPasswordForm.reset();
+        resetMessage.textContent = '';
+        resetMessage.className = 'message';
+    }
+});
