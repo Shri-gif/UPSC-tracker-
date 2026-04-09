@@ -176,7 +176,7 @@
                         </div>
                         <button type="submit">🚀 Login</button>
                         <p style="text-align:center; margin-top:10px;">
-                    <button type="button" onclick="resetPassword()">Forgot Password</button>
+                    <button type="button" id="forgotBtn">Forgot Password</button>
                         </p>
                     </form> 
                 </div>
@@ -270,6 +270,7 @@
     <script type="module" src="app.js"></script>
 
     <script>
+        console.log("JS LOADED 🔥");
 async function loadNews() {
   const { data, error } = await supabaseClient
     .from('news')
@@ -312,7 +313,7 @@ async function loadNews() {
     activeTab.style.display = "block";
   }
         }
-        alert("clicked")
+        
 async function resetPassword() {
   const email = document.getElementById("loginEmail").value;
 
@@ -334,6 +335,11 @@ async function resetPassword() {
 
 // 🔥 YE ADD KARO
 window.resetPassword = resetPassword;
+        
+        document.getElementById("forgotBtn").addEventListener("click", () => {
+  alert("Button clicked ✅");
+  resetPassword();
+});
         
     </script>
     
