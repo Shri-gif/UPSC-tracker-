@@ -176,7 +176,7 @@
                         </div>
                         <button type="submit">🚀 Login</button>
                         <p style="text-align:center; margin-top:10px;">
-                    <a href="#" onclick="resetPassword()">Forgot Password?</a>
+                    <button type="button" onclick="resetPassword()">Forgot Password</button>
                         </p>
                     </form> 
                 </div>
@@ -312,8 +312,8 @@ async function loadNews() {
     activeTab.style.display = "block";
   }
         }
-
-        async function resetPassword() {
+        alert("clicked")
+async function resetPassword() {
   const email = document.getElementById("loginEmail").value;
 
   if (!email) {
@@ -330,7 +330,11 @@ async function loadNews() {
   } else {
     alert("✅ Password reset link sent! Check your email 📩");
   }
-        }
+}
+
+// 🔥 YE ADD KARO
+window.resetPassword = resetPassword;
+        
     </script>
     
 </body>
