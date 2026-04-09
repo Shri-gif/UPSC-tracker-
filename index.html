@@ -322,7 +322,7 @@ async function loadNews() {
   }
 
   const { data, error } = await supabaseClient.auth.resetPasswordForEmail(email, {
-    redirectTo: window.location.origin
+    redirectTo: "https://shri-gif.github.io/UPSC-tracker-/reset.html"
   });
 
   if (error) {
