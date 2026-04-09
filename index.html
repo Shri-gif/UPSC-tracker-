@@ -323,7 +323,7 @@ async function resetPassword() {
   }
 
   const { error } = await supabaseClient.auth.resetPasswordForEmail(email, {
-    redirectTo: "https://shri-gif.github.io/UPSC-tracker-/reset.html"
+    redirectTo: "https://shri-gif.github.io/UPSC-tracker/reset.html"
   });
 
   if (error) {
