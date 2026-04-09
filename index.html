@@ -133,80 +133,6 @@
   color: white;
   border: none;
          }
-         .forgot-password-link {
-    color: #007bff;
-    text-decoration: none;
-    font-size: 14px;
-    cursor: pointer;
-}
-
-.forgot-password-link:hover {
-    text-decoration: underline;
-}
-
-.modal {
-    position: fixed;
-    z-index: 1000;
-    left: 0;
-    top: 0;
-    width: 100%;
-    height: 100%;
-    background-color: rgba(0,0,0,0.5);
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
-
-.modal-content {
-    background-color: white;
-    margin: auto;
-    padding: 30px;
-    border-radius: 10px;
-    width: 90%;
-    max-width: 400px;
-    box-shadow: 0 4px 20px rgba(0,0,0,0.3);
-}
-
-.close {
-    color: #aaa;
-    float: right;
-    font-size: 28px;
-    font-weight: bold;
-    cursor: pointer;
-}
-
-.close:hover {
-    color: black;
-}
-
-.message {
-    margin-top: 15px;
-    padding: 10px;
-    border-radius: 5px;
-    text-align: center;
-}
-
-.message.success {
-    background-color: #d4edda;
-    color: #155724;
-    border: 1px solid #c3e6cb;
-}
-
-.message.error {
-    background-color: #f8d7da;
-    color: #721c24;
-    border: 1px solid #f5c6cb;
-}
-
-.modal-links {
-    margin-top: 20px;
-    text-align: center;
-}
-
-.modal-links a {
-    color: #007bff;
-    text-decoration: none;
-}
     </style>  
     
 </head>
@@ -250,9 +176,6 @@
                         </div>
                         <button type="submit">🚀 Login</button>
                     </form> 
-                    <div class="forgot-password-section">
-           <a href="#" id="showResetPassword" class="forgot-password-link">Forgot Password?</a>
-                    </div> 
                 </div>
                 <div class="auth-form">
                     <h3>✨ Sign Up</h3>
@@ -385,15 +308,8 @@ async function loadNews() {
   if (activeTab) {
     activeTab.style.display = "block";
   }
-            if (tabId === "current") {
-    loadNews();
-  }
-
-  if (tabId === "analytics") {
-    loadHistory();
-  }
-        } 
-        
-    </script>  
+        }
+    </script>
+    
 </body>
 </html>
