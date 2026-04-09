@@ -176,6 +176,9 @@
                         </div>
                         <button type="submit">🚀 Login</button>
                     </form> 
+                    <p style="text-align:center; margin-top:10px;">
+                  <a href="#" onclick="resetPassword()">Forgot Password?</a>
+                    </p>
                 </div>
                 <div class="auth-form">
                     <h3>✨ Sign Up</h3>
@@ -307,6 +310,24 @@ async function loadNews() {
   const activeTab = document.getElementById(tabId);
   if (activeTab) {
     activeTab.style.display = "block";
+  }
+        }
+        async function resetPassword() {
+  const email = document.getElementById("loginEmail").value;
+
+  if (!email) {
+    alert("Please enter your email first!");
+    return;
+  }
+
+  const { data, error } = await supabaseClient.auth.resetPasswordForEmail(email, {
+    redirectTo: window.location.origin
+  });
+
+  if (error) {
+    alert("❌ Error: " + error.message);
+  } else {
+    alert("✅ Password reset link sent! Check your email 📩");
   }
         }
     </script>
