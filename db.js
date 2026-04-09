@@ -75,54 +75,53 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     // Reset Password Form Submit
-    if (resetPasswordForm) {
-        resetPasswordForm.addEventListener('submit', async function(e) {
-            e.preventDefault();
-            
-            const email = resetEmail.value.trim();
-            
-            if (!email) {
-                showMessage('Email address enter karein!', 'error');
-                return;
-            }
+    // Reset Password - Updated with better error handling
+resetPasswordForm.addEventListener('submit', async function(e) {
+    e.preventDefault();
+    
+    const email = resetEmail.value.trim();
+    
+    if (!email) {
+        showMessage('Email address enter karein!', 'error');
+        return;
+    }
 
-            // Disable button
-            resetPasswordBtn.disabled = true;
-            resetPasswordBtn.textContent = 'Bhej raha hun...';
+    resetPasswordBtn.disabled = true;
+    resetPasswordBtn.textContent = 'Bhej raha hun...';
+    resetMessage.innerHTML = ''; // Clear previous messages
 
-            try {
-                // Supabase se reset password request
-                const { data, error } = await supabase.auth.resetPasswordForEmail(email, {
-                    redirectTo: `${window.location.origin}/update-password.html` // Ye page banayenge
-                });
-
-                if (error) {
-                    console.error('Reset password error:', error);
-                    showMessage(error.message || 'Kuch galat ho gaya! Email check karein.', 'error');
-                } else {
-                    showMessage('Password reset link aapke email pe bhej diya gaya! Check karein inbox ya spam folder.', 'success');
-                    resetForm();
-                }
-            } catch (err) {
-                console.error('Reset password error:', err);
-                showMessage('Network error! Internet connection check karein.', 'error');
-            } finally {
-                // Re-enable button
-                resetPasswordBtn.disabled = false;
-                resetPasswordBtn.textContent = 'Reset Password Link Bhejo';
-            }
+    try {
+        // Supabase reset password with better options
+        const { data, error } = await supabase.auth.resetPasswordForEmail(email, {
+            redirectTo: window.location.origin + '/update-password.html'
         });
-    }
 
-    // Helper functions
-    function showMessage(message, type) {
-        resetMessage.textContent = message;
-        resetMessage.className = `message ${type}`;
-    }
+        console.log('Reset response:', data, error); // Debug ke liye
 
-    function resetForm() {
-        resetPasswordForm.reset();
-        resetMessage.textContent = '';
-        resetMessage.className = 'message';
+        if (error) {
+            // Common error messages ko handle karein
+            let errorMsg = error.message;
+            
+            if (errorMsg.includes('Invalid login ID')) {
+                errorMsg = 'Ye email registered nahi hai!';
+            } else if (errorMsg.includes('Email rate limit')) {
+                errorMsg = 'Bahut saare requests bheje hain. 1 minute wait karein!';
+            } else if (errorMsg.includes('SMTP error')) {
+                errorMsg = 'Email service mein issue. Thoda wait karke try karein!';
+            }
+            
+            showMessage(errorMsg, 'error');
+        } else {
+            showMessage('✅ Password reset link aapke email pe bhej diya! <br>Check karein Inbox/Spam folder.', 'success');
+            setTimeout(() => {
+                resetPasswordModal.style.display = 'none';
+            }, 4000);
+        }
+    } catch (err) {
+        console.error('Full error:', err);
+        showMessage('Network error! Internet check karein.', 'error');
+    } finally {
+        resetPasswordBtn.disabled = false;
+        resetPasswordBtn.textContent = 'Reset Password Link Bhejo';
     }
 });
