@@ -268,34 +268,47 @@
 
     <script> 
 async function loadNews() {
-  const { data, error } = await supabaseClient
-    .from('news')
-    .select('*')
-    .order('created_at', { ascending: false });
+  try {
+    const container = document.getElementById('news-container');
+    if (!container) {
+      console.log('News container not found');
+      return;
+    }
 
-  const container = document.getElementById('news-container');
+    // Show loading
+    container.innerHTML = '<div style="text-align:center; padding:20px;">⏳ Loading news...</div>';
 
-  if (!container) return;
+    const { data, error } = await supabaseClient
+      .from('news')
+      .select('*')
+      .order('created_at', { ascending: false })
+      .limit(10); // Limit to 10 recent news
 
-  if (error) {
-    container.innerHTML = "❌ Error loading news";
-    console.log(error);
-    return;
+    if (error) {
+      console.error('News error:', error);
+      container.innerHTML = '<div style="color:#dc3545;">❌ Error loading news. Please try again.</div>';
+      return;
+    }
+
+    if (!data || data.length === 0) {
+      container.innerHTML = '<div style="color:#666; padding:20px;">📰 No news available yet</div>';
+      return;
+    }
+
+    container.innerHTML = data.map(item => `
+      <div style="background:#f8f9fa; padding:20px; border-radius:12px; margin-bottom:15px; box-shadow:0 2px 10px rgba(0,0,0,0.1);">
+        <h4 style="margin:0 0 10px 0; color:#333;">${item.title || item.source || 'News'}</h4>
+        <p style="margin:0 0 15px 0; color:#555; line-height:1.5;">${item.summary || "Summary not available"}</p>
+        <div style="font-size:14px; color:#666; margin-bottom:10px;">
+          📅 ${new Date(item.created_at).toLocaleDateString('en-IN')}
+        </div>
+        ${item.link ? `<a href="${item.link}" target="_blank" style="color:#667eea; font-weight:600; text-decoration:none;">🔗 Read full article</a>` : ''}
+      </div>
+    `).join('');
+  } catch (error) {
+    console.error('Load news error:', error);
+    document.getElementById('news-container').innerHTML = '<div style="color:#dc3545;">❌ Network error. Please refresh.</div>';
   }
-
-  if (!data || data.length === 0) {
-    container.innerHTML = "No news available";
-    return;
-  }
-
-  container.innerHTML = data.map(item => `
-    <div style="background:#f1f1f1; padding:12px; margin-bottom:10px; border-radius:10px;">
-      <h4>${item.title || item.source}</h4>
-      <p>${item.summary || "No summary available"}</p>
-      <small>${item.created_at}</small><br>
-      <a href="${item.link}" target="_blank">Read more</a>
-    </div>
-  `).join('');
 }
         function showTab(tabId) {
   const tabs = document.querySelectorAll(".tab-content");
@@ -307,9 +320,17 @@ async function loadNews() {
   const activeTab = document.getElementById(tabId);
   if (activeTab) {
     activeTab.style.display = "block";
-  }      
-                loadNews();
-       }
+  }
+
+  // ✅ Only load news when Current Affairs tab is clicked
+  if (tabId === 'current') {
+    loadNews();
+  }
+}
+        // Add this after your showTab function
+document.addEventListener('DOMContentLoaded', function() {
+  showTab('current'); // Show Current Affairs by default
+});
      
     </script>
     
