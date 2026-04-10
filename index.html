@@ -308,8 +308,11 @@ async function loadNews() {
   if (activeTab) {
     activeTab.style.display = "block";
   }
+            if (tabId === "current") {
+                loadNews();
+            } 
         }
-     loadNews();
+     
     </script>
     
 </body>
