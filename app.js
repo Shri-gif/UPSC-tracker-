@@ -202,11 +202,11 @@ document.addEventListener('DOMContentLoaded', () => {
   loadNews();
 });
 async function loadNews() {
-  const { data, error } = await supabase
-    .from('news')
-    .select('*')
-    .order('created_at', { ascending: false });
-
+  const { data, error } = await supabaseClient
+  .from('news')
+  .select('*')
+  .in('source', ['The Hindu', 'The Economic Times', 'The Times of India'])
+  .order('created_at', { ascending: false });
   if (error) {
     console.log(error);
     return;
