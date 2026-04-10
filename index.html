@@ -293,9 +293,10 @@
 
   // 🔥 FILTER ADD HERE
   const filtered = data.filter(item =>
-    item.source?.includes("Hindu") ||
-    item.source?.includes("Times") ||
-    item.source?.includes("Economic")
+    item.source?.toLowerCase().includes("india") ||
+    item.source?.toLowerCase().includes("times") ||
+    item.source?.toLowerCase().includes("hindu") ||
+    item.source?.toLowerCase().includes("economic")
   );
 
   // ❗ Agar filter ke baad kuch nahi mila
