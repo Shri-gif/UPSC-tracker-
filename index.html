@@ -270,8 +270,7 @@
     <script type="module" src="app.js"></script>
 
     <script>
-        console.log("JS LOADED 🔥");
-async function loadNews() {
+        async function loadNews() {
   const { data, error } = await supabaseClient
     .from('news')
     .select('*') 
@@ -292,7 +291,20 @@ async function loadNews() {
     return;
   }
 
-  container.innerHTML = data.map(item => `
+  // 🔥 FILTER ADD HERE
+  const filtered = data.filter(item =>
+    item.source?.includes("Hindu") ||
+    item.source?.includes("Times") ||
+    item.source?.includes("Economic")
+  );
+
+  // ❗ Agar filter ke baad kuch nahi mila
+  if (filtered.length === 0) {
+    container.innerHTML = "⚠️ No UPSC relevant news found";
+    return;
+  }
+
+  container.innerHTML = filtered.map(item => `
     <div style="background:#f1f1f1; padding:12px; margin-bottom:10px; border-radius:10px;">
       <h4>${item.title || item.source}</h4>
       <p>${item.summary || "No summary available"}</p>
