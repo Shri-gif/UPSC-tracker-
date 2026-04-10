@@ -196,3 +196,53 @@ window.logout = signOut;
 window.resetForm = resetForm;
 
 document.addEventListener('DOMContentLoaded', init);
+
+async function loadNews() {
+  const container = document.getElementById("news-container");
+  if (!container) return;
+
+  container.innerHTML = "Loading news... ⏳";
+
+  const { data, error } = await supabase
+    .from('news')
+    .select('*')
+    .order('created_at', { ascending: false });
+
+  if (error) {
+    console.log("NEWS ERROR:", error);
+    container.innerHTML = "Failed to load news ❌";
+    return;
+  }
+
+  displayNews(data || []);
+}
+
+function displayNews(news) {
+  const container = document.getElementById("news-container");
+
+  if (!news.length) {
+    container.innerHTML = "No news available 📰";
+    return;
+  }
+
+  container.innerHTML = news.map(item => `
+    <div class="news-card">
+      <h3>${item.title}</h3>
+      <p>${item.content}</p>
+      <small>${new Date(item.created_at).toLocaleDateString()}</small>
+    </div>
+  `).join('');
+    }
+window.showTab = function(tabId) {
+  const tabs = document.querySelectorAll(".tab-content");
+
+  tabs.forEach(tab => tab.style.display = "none");
+
+  const activeTab = document.getElementById(tabId);
+  if (activeTab) activeTab.style.display = "block";
+
+  // 🔥 LOAD NEWS HERE
+  if (tabId === "current") {
+    loadNews();
+  }
+};
