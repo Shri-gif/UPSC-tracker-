@@ -275,6 +275,7 @@ async function loadNews() {
   const { data, error } = await supabaseClient
     .from('news')
     .select('*')
+    .in('source', ['The Hindu', 'The Economic Times', 'The Times of India'])
     .order('created_at', { ascending: false });
 
   const container = document.getElementById('news-container');
