@@ -203,14 +203,48 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 async function loadNews() {
   const { data, error } = await supabaseClient
-  .from('news')
-  .select('*')
-  .in('source', ['The Hindu', 'The Economic Times', 'The Times of India'])
-  .order('created_at', { ascending: false });
+    .from('news')
+    .select('*')
+    .order('created_at', { ascending: false });
+
+  const container = document.getElementById('news-container');
+
   if (error) {
+    container.innerHTML = "❌ Error loading news";
     console.log(error);
     return;
   }
+
+  if (!data || data.length === 0) {
+    container.innerHTML = "No news available";
+    return;
+  }
+
+  // 🔥 FILTER (SOURCE + KEYWORDS)
+  const keywords = ["policy", "government", "economy", "international", "environment"];
+
+  const filteredData = data.filter(item =>
+    (item.source?.includes("Hindu") ||
+     item.source?.includes("Economic") ||
+     item.source?.includes("Times of India")) &&
+    keywords.some(k => item.title?.toLowerCase().includes(k))
+  );
+
+  // 🔥 DISPLAY FILTERED DATA
+  if (filteredData.length === 0) {
+    container.innerHTML = "No relevant UPSC news found";
+    return;
+  }
+
+  container.innerHTML = filteredData.map(item => `
+    <div style="background:#f1f1f1; padding:12px; margin-bottom:10px; border-radius:10px;">
+      <h4>${item.title || item.source}</h4>
+      <p>${item.summary || "No summary available"}</p>
+      <small>${item.created_at}</small><br>
+      <a href="${item.link}" target="_blank">Read more</a>
+    </div>
+  `).join('');
+}
 
   displayNews(data);
 }
