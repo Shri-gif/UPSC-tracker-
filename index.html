@@ -175,9 +175,6 @@
                             <input type="password" id="loginPassword" placeholder="Password" required>
                         </div>
                         <button type="submit">🚀 Login</button>
-                        <p style="text-align:center; margin-top:10px;">
-                    <button type="button" id="forgotBtn">Forgot Password</button>
-                        </p>
                     </form> 
                 </div>
                 <div class="auth-form">
@@ -270,10 +267,10 @@
     <script type="module" src="app.js"></script>
 
     <script>
-        async function loadNews() {
+async function loadNews() {
   const { data, error } = await supabaseClient
     .from('news')
-    .select('*') 
+    .select('*')
     .order('created_at', { ascending: false });
 
   const container = document.getElementById('news-container');
@@ -291,21 +288,7 @@
     return;
   }
 
-  // 🔥 FILTER ADD HERE
-  const filtered = data.filter(item =>
-    item.source?.toLowerCase().includes("theindianexpress") ||
-    item.source?.toLowerCase().includes("theeconomictimes") ||
-    item.source?.toLowerCase().includes("thehindu") ||
-    item.source?.toLowerCase().includes("drishtiiasdailynewsanalysis")
-  );
-
-  // ❗ Agar filter ke baad kuch nahi mila
-  if (filtered.length === 0) {
-    container.innerHTML = "⚠️ No UPSC relevant news found";
-    return;
-  }
-
-  container.innerHTML = filtered.map(item => `
+  container.innerHTML = data.map(item => `
     <div style="background:#f1f1f1; padding:12px; margin-bottom:10px; border-radius:10px;">
       <h4>${item.title || item.source}</h4>
       <p>${item.summary || "No summary available"}</p>
@@ -326,34 +309,6 @@
     activeTab.style.display = "block";
   }
         }
-        
-async function resetPassword() {
-  const email = document.getElementById("loginEmail").value;
-
-  if (!email) {
-    alert("Please enter your email first!");
-    return;
-  }
-
-  const { error } = await supabase.auth.resetPasswordForEmail(email, {
-    redirectTo: "https://shri-gif.github.io/UPSC-tracker/reset.html"
-  });
-
-  if (error) {
-    alert("❌ Error: " + error.message);
-  } else {
-    alert("✅ Password reset link sent! Check your email 📩");
-  }
-}
-
-// 🔥 YE ADD KARO
-window.resetPassword = resetPassword;
-        
-        document.getElementById("forgotBtn").addEventListener("click", () => {
-  alert("Button clicked ✅");
-  resetPassword();
-});
-        
     </script>
     
 </body>
