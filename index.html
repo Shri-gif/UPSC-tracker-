@@ -266,7 +266,7 @@
     <script type="module" src="db.js"></script>
     <script type="module" src="app.js"></script>
 
-    <script type="module">
+    <script> 
 async function loadNews() {
   const { data, error } = await supabaseClient
     .from('news')
@@ -307,11 +307,9 @@ async function loadNews() {
   const activeTab = document.getElementById(tabId);
   if (activeTab) {
     activeTab.style.display = "block";
-  }
-            if (tabId === "current") {
+  }      
                 loadNews();
-            } 
-        }
+       }
      
     </script>
     
