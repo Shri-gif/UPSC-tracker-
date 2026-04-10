@@ -252,3 +252,47 @@ window.showTab = function(tabId) {
     loadNews();
   }
 };
+
+async function loadDailyAnalysis() {
+  const container = document.getElementById("analysis-container");
+  if (!container) return;
+
+  container.innerHTML = "Loading analysis...";
+
+  const { data, error } = await supabase
+    .from('daily_analysis')
+    .select('*')
+    .order('date', { ascending: false });
+
+  if (error) {
+    console.log(error);
+    container.innerHTML = "Error loading analysis ❌";
+    return;
+  }
+
+  displayAnalysis(data);
+}
+function displayAnalysis(data) {
+  const container = document.getElementById("analysis-container");
+
+  container.innerHTML = data.map(item => `
+    <div class="news-card">
+
+      <h3>📌 ${item.topic}</h3>
+      <small>${item.date}</small>
+
+      <p><b>🧾 What:</b> ${item.what_is}</p>
+      <p><b>📰 Why:</b> ${item.why_in_news}</p>
+      <p><b>📚 Background:</b> ${item.background}</p>
+      <p><b>📊 Analysis:</b> ${item.analysis}</p>
+      <p><b>⚠️ Challenges:</b> ${item.challenges}</p>
+      <p><b>🎯 Exam:</b> ${item.exam_angle}</p>
+
+      <p style="font-size:12px;">Source: ${item.source}</p>
+
+    </div>
+  `).join('');
+}
+if (tabId === "daily") {
+  loadDailyAnalysis();
+}
