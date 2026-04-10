@@ -228,11 +228,17 @@ function displayNews(news) {
   container.innerHTML = news.map(item => `
     <div class="news-card">
       <h3>${item.title}</h3>
-      <p>${item.content}</p>
-      <small>${new Date(item.created_at).toLocaleDateString()}</small>
+      <p>${item.summary || item.content || "No summary available"}</p>
+      
+      <a href="${item.link}" target="_blank" 
+         style="color:blue; font-weight:bold; text-decoration:none;">
+         🔗 Read more
+      </a>
+      
+      <br><small>${new Date(item.created_at).toLocaleDateString()}</small>
     </div>
   `).join('');
-    }
+}
 window.showTab = function(tabId) {
   const tabs = document.querySelectorAll(".tab-content");
 
