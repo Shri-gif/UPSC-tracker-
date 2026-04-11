@@ -296,3 +296,64 @@ function displayAnalysis(data) {
 if (tabId === "daily") {
   loadDailyAnalysis();
 }
+
+async function processVideo() {
+
+  // 🔥 Step 1: YouTube link le
+  const link = prompt("Paste YouTube video link:");
+  if (!link) return;
+
+  // 🔥 Step 2: Transcript le (auto paste)
+  const transcript = prompt("Paste transcript here:");
+  if (!transcript) return;
+
+  // 🔥 Step 3: AI se analysis
+  const aiData = await generateAnalysis(transcript);
+
+  // 🔥 Step 4: Supabase me save
+  await saveAnalysis(aiData);
+
+  // 🔥 Step 5: UI refresh
+  loadAnalysis();
+
+  alert("✅ Done! Analysis added");
+}
+
+// 🔽 EXISTING FUNCTIONS (upar wale)
+function createEntryCard(entry) { ... }
+function generateAnalytics(entries) { ... }
+
+// 🔥 YAHAN ADD KAR (NEW FUNCTIONS)
+
+async function generateAnalysis(text) {
+  const res = await fetch("https://eor45gntg2p0jm0.m.pipedream.net", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify({
+      text: text
+    })
+  });
+
+  return await res.json();
+}
+
+async function saveAnalysis(aiData) {
+  const { error } = await supabase.from("daily_analysis").insert([{
+    date: new Date().toISOString().split("T")[0],
+    topic: aiData.topic,
+    what_is: aiData.what_is,
+    why_in_news: aiData.why_in_news,
+    background: aiData.background,
+    analysis: aiData.analysis,
+    challenges: aiData.challenges,
+    exam_angle: aiData.exam_angle,
+    source: "YouTube"
+  }]);
+
+  if (error) {
+    alert("❌ Error saving");
+    console.log(error);
+  }
+}
