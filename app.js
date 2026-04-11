@@ -326,18 +326,13 @@ export async function generateAnalysis(topic) {
     `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=process.env.AIzaSyAgusHcHsOIKPhdidhMR4fpdR9JZbdjeD0`,
     {
       method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
+      headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
         contents: [
           {
             parts: [
               {
-                text: `
-You are an exam assistant.
-
-Return ONLY valid JSON:
+                text: `Return ONLY JSON:
 {
   "topic": "",
   "what_is": "",
@@ -347,31 +342,36 @@ Return ONLY valid JSON:
   "challenges": "",
   "exam_angle": ""
 }
-
-Topic: ${topic}
-                `,
-              },
-            ],
-          },
-        ],
+Topic: ${topic}`
+              }
+            ]
+          }
+        ]
       }),
     }
   );
 
-  const raw = await generateAnalysis(topic);
+  const data = await response.json();
 
-// extract text safely
-const text = raw?.candidates?.[0]?.content?.parts?.[0]?.text;
+  const text = data?.candidates?.[0]?.content?.parts?.[0]?.text;
 
-let aiData;
+  console.log("🧾 RAW TEXT:", text);
 
-try {
-  aiData = JSON.parse(text);
-} catch (e) {
-  console.log("JSON ERROR:", text);
-  aiData = null;
+  let aiData;
+
+  try {
+    aiData = JSON.parse(text);
+  } catch (e) {
+    console.log("❌ PARSE ERROR:", text);
+    aiData = null;
+  }
+
+  return aiData;
 }
-  
+
+const result = await generateAnalysis("India AI policy");
+console.log(result);
+
 async function saveAnalysis(aiData) {
   console.log("RAW:", raw);
   const { error } = await supabase.from("daily_analysis").insert([{
