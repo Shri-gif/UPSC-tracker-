@@ -251,6 +251,9 @@ window.showTab = function(tabId) {
   if (tabId === "current") {
     loadNews();
   }
+  if (tabId === "daily") {
+  loadDailyAnalysis();
+  }
 };
 
 async function loadDailyAnalysis() {
@@ -293,9 +296,7 @@ function displayAnalysis(data) {
     </div>
   `).join('');
 }
-if (tabId === "daily") {
-  loadDailyAnalysis();
-}
+
 
 async function processVideo() {
 
@@ -314,14 +315,10 @@ async function processVideo() {
   await saveAnalysis(aiData);
 
   // 🔥 Step 5: UI refresh
-  loadAnalysis();
+  loadDailyAnalysis();
 
   alert("✅ Done! Analysis added");
 }
-
-// 🔽 EXISTING FUNCTIONS (upar wale)
-function createEntryCard(entry) { ... }
-function generateAnalytics(entries) { ... }
 
 // 🔥 YAHAN ADD KAR (NEW FUNCTIONS)
 
