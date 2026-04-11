@@ -358,28 +358,31 @@ Topic: ${topic}
     }
   );
 
-  const raw = await generateAnalysis("India AI policy");
+  const raw = await generateAnalysis(topic);
+
+// extract text safely
+const text = raw?.candidates?.[0]?.content?.parts?.[0]?.text;
 
 let aiData;
 
 try {
-  aiData = JSON.parse(raw);
+  aiData = JSON.parse(text);
 } catch (e) {
-  console.log("Invalid JSON:", raw);
+  console.log("JSON ERROR:", text);
   aiData = null;
 }
-
+  
 async function saveAnalysis(aiData) {
-  console.log("AI DATA:", aiData);
+  console.log("RAW:", raw);
   const { error } = await supabase.from("daily_analysis").insert([{
     date: new Date().toISOString().split("T")[0],
-    topic: aiData.topic,
-    what_is: aiData.what_is,
-    why_in_news: aiData.why_in_news,
-    background: aiData.background,
-    analysis: aiData.analysis,
-    challenges: aiData.challenges,
-    exam_angle: aiData.exam_angle,
+    topic: aiData?.topic || "N/A",
+    what_is: aiData?.what_is || "N/A",
+    why_in_news: aiData?.why_in_news || "N/A",
+    background: aiData?.background || "N/A",
+    analysis: aiData?.analysis || "N/A",
+    challenges: aiData?.challenges || "N/A",
+    exam_angle: aiData?.exam_angle || "N/A",
     source: "YouTube"
   }]);
 
