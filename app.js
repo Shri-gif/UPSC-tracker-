@@ -321,18 +321,51 @@ window.processVideo = function() {
 };
 // 🔥 YAHAN ADD KAR (NEW FUNCTIONS)
 
-async function generateAnalysis(text) {
-  const res = await fetch("https://eor45gntg2p0jm0.m.pipedream.net", {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json"
-    },
-    body: JSON.stringify({
-      text: text
-    })
-  });
+export async function generateAnalysis(topic) {
+  const response = await fetch(
+    "https://api-inference.huggingface.co/models/mistralai/Mistral-7B-Instruct-v0.2",
+    {
+      method: "POST",
+      headers: {
+        Authorization: `Bearer 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`,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        inputs: `
+You are an exam assistant.
 
-  return await res.json();
+Return ONLY JSON:
+{
+  "topic": "",
+  "what_is": "",
+  "why_in_news": "",
+  "background": "",
+  "analysis": "",
+  "challenges": "",
+  "exam_angle": ""
+}
+
+Topic: ${topic}
+        `,
+      }),
+    }
+  );
+
+  const data = await response.json();
+
+  return data?.[0]?.generated_text;
+}
+let raw = await generateAnalysis(topic);
+
+console.log("HF RAW:", raw);
+
+let aiData;
+
+try {
+  aiData = JSON.parse(raw);
+} catch (e) {
+  console.log("JSON failed:", raw);
+  aiData = null;
 }
 
 async function saveAnalysis(aiData) {
