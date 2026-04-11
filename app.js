@@ -336,7 +336,9 @@ async function generateAnalysis(text) {
 }
 
 async function saveAnalysis(aiData) {
+  console.log("AI DATA:", aiData);
   const { error } = await supabase.from("daily_analysis").insert([{
+    user_id: currentUser.id,
     date: new Date().toISOString().split("T")[0],
     topic: aiData.topic,
     what_is: aiData.what_is,
@@ -349,8 +351,8 @@ async function saveAnalysis(aiData) {
   }]);
 
   if (error) {
-    alert("❌ Error saving");
-    console.log(error);
-  }
+  console.log("SAVE ERROR:", error);
+  alert("❌ Error saving: " + error.message);
+  } 
 }
 window.processVideo = processVideo;
