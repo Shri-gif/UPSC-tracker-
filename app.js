@@ -320,6 +320,9 @@ async function processVideo() {
   alert("✅ Done! Analysis added");
 }
 
+window.testClick = function() {
+  alert("Button working ✅");
+};
 // 🔥 YAHAN ADD KAR (NEW FUNCTIONS)
 
 async function generateAnalysis(text) {
