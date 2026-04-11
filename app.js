@@ -354,3 +354,4 @@ async function saveAnalysis(aiData) {
     console.log(error);
   }
 }
+window.processVideo = processVideo;
