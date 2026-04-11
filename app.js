@@ -323,18 +323,21 @@ window.processVideo = function() {
 
 export async function generateAnalysis(topic) {
   const response = await fetch(
-    "https://api-inference.huggingface.co/models/mistralai/Mistral-7B-Instruct-v0.2",
+    `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=process.env.AIzaSyAgusHcHsOIKPhdidhMR4fpdR9JZbdjeD0`,
     {
       method: "POST",
       headers: {
-        Authorization: `Bearer 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`,
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        inputs: `
+        contents: [
+          {
+            parts: [
+              {
+                text: `
 You are an exam assistant.
 
-Return ONLY JSON:
+Return ONLY valid JSON:
 {
   "topic": "",
   "what_is": "",
@@ -346,25 +349,23 @@ Return ONLY JSON:
 }
 
 Topic: ${topic}
-        `,
+                `,
+              },
+            ],
+          },
+        ],
       }),
     }
   );
 
-  const data = await response.json();
-
-  return data?.[0]?.generated_text;
-}
-let raw = await generateAnalysis(topic);
-
-console.log("HF RAW:", raw);
+  const raw = await generateAnalysis("India AI policy");
 
 let aiData;
 
 try {
   aiData = JSON.parse(raw);
 } catch (e) {
-  console.log("JSON failed:", raw);
+  console.log("Invalid JSON:", raw);
   aiData = null;
 }
 
