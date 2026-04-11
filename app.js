@@ -300,10 +300,6 @@ function displayAnalysis(data) {
 
 async function processVideo() {
 
-  // 🔥 Step 1: YouTube link le
-  const link = prompt("Paste YouTube video link:");
-  if (!link) return;
-
   // 🔥 Step 2: Transcript le (auto paste)
   const transcript = prompt("Paste transcript here:");
   if (!transcript) return;
