@@ -320,8 +320,8 @@ async function processVideo() {
   alert("✅ Done! Analysis added");
 }
 
-window.testClick = function() {
-  alert("Button working ✅");
+window.processVideo = function() {
+  alert("Process function running ✅");
 };
 // 🔥 YAHAN ADD KAR (NEW FUNCTIONS)
 
