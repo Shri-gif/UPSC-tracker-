@@ -150,10 +150,10 @@ body {
 }
 
 .dashboard {
-    max-width: 800px;
+    max-width: 1200px;
     margin: 0 auto;
     display: grid;
-    grid-template-columns: 1fr 1fr;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
     gap: 20px;
     padding: 20px;
 }
@@ -258,11 +258,9 @@ body {
 
 /* Mobile Responsive */
 @media (max-width: 768px) {
-    .dashboard {
+        .dashboard {
         grid-template-columns: 1fr;
-        gap: 15px;
-        padding: 10px;
-    }
+        } 
     
     .streak-number {
         font-size: 3em;
@@ -350,37 +348,55 @@ body {
     </div>
         </div>
         
-        <div class="dashboard">
-        <div class="streak-card">
-            <h3>📈 Study Streak</h3>
-            <div class="streak-display">
-                <span class="streak-number" id="streakCount">0</span>
-                <span class="streak-label">days</span>
-            </div>
-            <div class="streak-actions">
-                <button id="markToday" class="btn-mark">✅ Mark Today</button>
-                <button id="resetStreak" class="btn-reset">🔄 Reset</button>
-            </div>
-            <div class="streak-info">
-                <span id="lastStudyDate">-</span>
-            </div>
+        <!-- Updated Dashboard Section -->
+<div class="dashboard">
+    <!-- Streak Card -->
+    <div class="streak-card">
+        <h3>📈 Study Streak</h3>
+        <div class="streak-display">
+            <span class="streak-number" id="streakCount">0</span>
+            <span class="streak-label">days</span>
         </div>
-            
-            <!-- Streak & Countdown Section -->
-
-        <div class="countdown-card">
-            <h3>⏰ UPSC Prelims 2025</h3>
-            <div class="countdown-display" id="countdown">
-                <span id="days">00</span>D
-                <span id="hours">00</span>H
-                <span id="minutes">00</span>M
-                <span id="seconds">00</span>S
-            </div>
-            <div class="countdown-date">
-                <strong>May 25, 2025</strong>
-            </div>
+        <div class="streak-actions">
+            <button id="markToday" class="btn-mark">✅ Mark Today</button>
+            <button id="resetStreak" class="btn-reset">🔄 Reset</button>
+        </div>
+        <div class="streak-info">
+            <span id="lastStudyDate">-</span>
         </div>
     </div>
+
+    <!-- Prelims Countdown -->
+    <div class="countdown-card">
+        <h3 id="prelimsStatus">📚 PRELIMS 2025</h3>
+        <div class="countdown-display" id="prelimsCountdown">
+            <span id="prelimsDays">00</span>D
+            <span id="prelimsHours">00</span>H
+            <span id="prelimsMinutes">00</span>M
+            <span id="prelimsSeconds">00</span>S
+        </div>
+        <div class="countdown-date">
+            <strong>25 May 2026</strong>
+        </div>
+    </div>
+
+    <!-- Mains Countdown -->
+    <div class="countdown-card">
+        <h3 id="mainsStatus">📖 MAINS 2025</h3>
+        <div class="countdown-display" id="mainsCountdown">
+            <span id="mainsDays">00</span>D
+            <span id="mainsHours">00</span>H
+            <span id="mainsMinutes">00</span>M
+            <span id="mainsSeconds">00</span>S
+        </div>
+        <div class="countdown-date">
+            <strong>22 Aug 2026 (Tentative)</strong>
+        </div>
+    </div>
+    <p class="exam-note">
+*Expected dates based on UPSC calendar
+    </p>
+</div> 
 
         
        <div id="analytics" class="tab-content">
