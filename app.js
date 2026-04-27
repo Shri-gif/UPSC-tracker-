@@ -419,18 +419,25 @@ localStorage.setItem("lastStudyDate", today);
 
 document.getElementById("streak").innerText = streak;
 
-const examDate = new Date("May 24, 2026 00:00:00").getTime();
+const prelimsDate = new Date("May 24, 2026 00:00:00").getTime();
+const mainsDate   = new Date("Sept 18, 2026 00:00:00").getTime();
 
 setInterval(function(){
 
  let now = new Date().getTime();
- let gap = examDate - now;
 
- let days = Math.floor(gap/(1000*60*60*24));
- let hours = Math.floor((gap%(1000*60*60*24))/(1000*60*60));
- let mins = Math.floor((gap%(1000*60*60))/60000);
+ // Prelims
+ let pGap = prelimsDate - now;
+ let pDays = Math.floor(pGap/(1000*60*60*24));
 
- document.getElementById("countdown").innerHTML =
- days + " Days " + hours + " Hours " + mins + " Min Left";
+ document.getElementById("prelimsCount").innerHTML =
+ "⏳ Prelims: " + pDays + " Days Left";
+
+ // Mains
+ let mGap = mainsDate - now;
+ let mDays = Math.floor(mGap/(1000*60*60*24));
+
+ document.getElementById("mainsCount").innerHTML =
+ "📝 Mains: " + mDays + " Days Left";
 
 },1000);
