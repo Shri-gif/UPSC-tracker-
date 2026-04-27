@@ -1,5 +1,6 @@
-// UPSC Prelims 2025 Date
-const UPSC_PRELIMS_2025 = new Date('2025-05-25T09:30:00').getTime();
+// UPSC Exam Dates
+const UPSC_PRELIMS_2026 = new Date('2026-05-25T09:30:00').getTime();  // Prelims
+const UPSC_MAINS_2026 = new Date('2026-08-22T09:30:00').getTime();    // Mains (Tentative)
 
 // Streak System
 let streakCount = 0;
@@ -24,7 +25,7 @@ function saveStreakData() {
     localStorage.setItem('lastStudyDate', lastStudyDate.toISOString());
 }
 
-// Check if streak continues (same day or yesterday)
+// Check if streak continues
 function checkStreak() {
     const today = new Date();
     today.setHours(0, 0, 0, 0);
@@ -38,14 +39,11 @@ function checkStreak() {
     const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
     
     if (diffDays === 0) {
-        // Same day - already marked
         document.getElementById('markToday').textContent = '✅ Marked Today!';
         document.getElementById('markToday').disabled = true;
     } else if (diffDays === 1) {
-        // Yesterday - continue streak
         streakCount++;
     } else {
-        // More than 1 day gap - reset streak
         streakCount = 1;
     }
     
@@ -64,8 +62,6 @@ function markToday() {
     
     updateStreakDisplay();
     saveStreakData();
-    
-    // Celebration animation
     celebrate();
 }
 
@@ -81,11 +77,52 @@ function resetStreak() {
     }
 }
 
-// Update display
+// Update streak display
 function updateStreakDisplay() {
     document.getElementById('streakCount').textContent = streakCount;
     const lastDate = lastStudyDate ? lastStudyDate.toLocaleDateString('en-IN') : '-';
     document.getElementById('lastStudyDate').textContent = `Last: ${lastDate}`;
+}
+
+// Dual Countdown Function
+function updateCountdowns() {
+    const now = new Date().getTime();
+    
+    // Prelims Countdown
+    const prelimsDistance = UPSC_PRELIMS_2025 - now;
+    const prelimsDays = Math.floor(prelimsDistance / (1000 * 60 * 60 * 24));
+    const prelimsHours = Math.floor((prelimsDistance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+    const prelimsMinutes = Math.floor((prelimsDistance % (1000 * 60 * 60)) / (1000 * 60));
+    const prelimsSeconds = Math.floor((prelimsDistance % (1000 * 60)) / 1000);
+    
+    // Mains Countdown
+    const mainsDistance = UPSC_MAINS_2025 - now;
+    const mainsDays = Math.floor(mainsDistance / (1000 * 60 * 60 * 24));
+    const mainsHours = Math.floor((mainsDistance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+    const mainsMinutes = Math.floor((mainsDistance % (1000 * 60 * 60)) / (1000 * 60));
+    const mainsSeconds = Math.floor((mainsDistance % (1000 * 60)) / 1000);
+    
+    // Update Prelims Display
+    if (prelimsDistance > 0) {
+        document.getElementById('prelimsDays').textContent = prelimsDays.toString().padStart(2, '0');
+        document.getElementById('prelimsHours').textContent = prelimsHours.toString().padStart(2, '0');
+        document.getElementById('prelimsMinutes').textContent = prelimsMinutes.toString().padStart(2, '0');
+        document.getElementById('prelimsSeconds').textContent = prelimsSeconds.toString().padStart(2, '0');
+        document.getElementById('prelimsStatus').textContent = '📚 PRELIMS';
+    } else {
+        document.getElementById('prelimsCountdown').innerHTML = '<span style="color: #ff6b6b; font-size: 1.2em;">🎉 PRELIMS DONE!</span>';
+    }
+    
+    // Update Mains Display
+    if (mainsDistance > 0) {
+        document.getElementById('mainsDays').textContent = mainsDays.toString().padStart(2, '0');
+        document.getElementById('mainsHours').textContent = mainsHours.toString().padStart(2, '0');
+        document.getElementById('mainsMinutes').textContent = mainsMinutes.toString().padStart(2, '0');
+        document.getElementById('mainsSeconds').textContent = mainsSeconds.toString().padStart(2, '0');
+        document.getElementById('mainsStatus').textContent = '📖 MAINS';
+    } else {
+        document.getElementById('mainsCountdown').innerHTML = '<span style="color: #ff6b6b; font-size: 1.2em;">🎉 MAINS DONE!</span>';
+    }
 }
 
 // Celebration animation
@@ -98,69 +135,39 @@ function celebrate() {
         streakNum.style.transform = 'scale(1)';
     }, 300);
     
-    // Confetti effect (simple)
     createConfetti();
 }
 
 function createConfetti() {
     for (let i = 0; i < 50; i++) {
         const confetti = document.createElement('div');
-        confetti.style.position = 'fixed';
-        confetti.style.left = Math.random() * 100 + 'vw';
-        confetti.style.top = '-10px';
-        confetti.style.width = '10px';
-        confetti.style.height = '10px';
-        confetti.style.background = `hsl(${Math.random() * 360}, 70%, 60%)`;
-        confetti.style.borderRadius = '50%';
-        confetti.style.pointerEvents = 'none';
-        confetti.style.zIndex = '1000';
-        confetti.style.animation = 'fall 3s linear forwards';
+        confetti.style.cssText = `
+            position: fixed;
+            left: ${Math.random() * 100}vw;
+            top: -10px;
+            width: 10px;
+            height: 10px;
+            background: hsl(${Math.random() * 360}, 70%, 60%);
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 1000;
+            animation: fall 3s linear forwards;
+        `;
         document.body.appendChild(confetti);
         
         setTimeout(() => confetti.remove(), 3000);
     }
 }
 
-// Countdown Timer
-function updateCountdown() {
-    const now = new Date().getTime();
-    const distance = UPSC_PRELIMS_2025 - now;
-    
-    const days = Math.floor(distance / (1000 * 60 * 60 * 24));
-    const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-    const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
-    const seconds = Math.floor((distance % (1000 * 60)) / 1000);
-    
-    document.getElementById('days').textContent = days.toString().padStart(2, '0');
-    document.getElementById('hours').textContent = hours.toString().padStart(2, '0');
-    document.getElementById('minutes').textContent = minutes.toString().padStart(2, '0');
-    document.getElementById('seconds').textContent = seconds.toString().padStart(2, '0');
-    
-    if (distance < 0) {
-        document.getElementById('countdown').innerHTML = '<span style="color: #ff6b6b; font-size: 1.5em;">🎉 EXAM DAY! 🎉</span>';
-    }
-}
-
-// Add CSS animation for confetti
-const style = document.createElement('style');
-style.textContent = `
-    @keyframes fall {
-        to {
-            transform: translateY(100vh) rotate(360deg);
-            opacity: 0;
-        }
-    }
-`;
-document.head.appendChild(style);
-
-// Event Listeners
+// Initialize everything
 document.addEventListener('DOMContentLoaded', function() {
     loadStreakData();
-    updateCountdown();
+    updateCountdowns();
     
+    // Event listeners
     document.getElementById('markToday').addEventListener('click', markToday);
     document.getElementById('resetStreak').addEventListener('click', resetStreak);
     
     // Update countdown every second
-    setInterval(updateCountdown, 1000);
+    setInterval(updateCountdowns, 1000);
 });
