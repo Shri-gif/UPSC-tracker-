@@ -420,24 +420,38 @@ localStorage.setItem("lastStudyDate", today);
 document.getElementById("streak").innerText = streak;
 
 const prelimsDate = new Date("May 24, 2026 00:00:00").getTime();
-const mainsDate   = new Date("Aug 21, 2026 00:00:00").getTime();
+const mainsDate = new Date("August 21, 2026 00:00:00").getTime();
 
 setInterval(function(){
 
- let now = new Date().getTime();
+let now = new Date().getTime();
 
- // Prelims
- let pGap = prelimsDate - now;
- let pDays = Math.floor(pGap/(1000*60*60*24));
 
- document.getElementById("prelimsCount").innerHTML =
- "⏳ Prelims: " + pDays + " Days Left";
+// PRELIMS
+let pGap = prelimsDate - now;
 
- // Mains
- let mGap = mainsDate - now;
- let mDays = Math.floor(mGap/(1000*60*60*24));
+let pDays = Math.floor(pGap/(1000*60*60*24));
+let pHours = Math.floor((pGap%(1000*60*60*24))/(1000*60*60));
+let pMins = Math.floor((pGap%(1000*60*60))/60000);
 
- document.getElementById("mainsCount").innerHTML =
- "📝 Mains: " + mDays + " Days Left";
+document.getElementById("prelimsCount").innerHTML =
+"⏳ Prelims: "
++ pDays+"d "
++ pHours+"h "
++ pMins+"m";
+
+
+// MAINS
+let mGap = mainsDate - now;
+
+let mDays = Math.floor(mGap/(1000*60*60*24));
+let mHours = Math.floor((mGap%(1000*60*60*24))/(1000*60*60));
+let mMins = Math.floor((mGap%(1000*60*60))/60000);
+
+document.getElementById("mainsCount").innerHTML =
+"📝 Mains: "
++ mDays+"d "
++ mHours+"h "
++ mMins+"m";
 
 },1000);
