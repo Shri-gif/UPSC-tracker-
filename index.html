@@ -135,59 +135,48 @@
   color: white;
   border: none;
          }
+
 .exam-dashboard{
 display:grid;
-grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
+grid-template-columns:repeat(auto-fit,minmax(280px,1fr));
 gap:20px;
-margin:25px 0;
+margin:30px 0;
 }
 
 .tracker-box{
 background:linear-gradient(45deg,#667eea,#764ba2);
 color:white;
 padding:25px;
-border-radius:18px;
+border-radius:20px;
 text-align:center;
-box-shadow:0 8px 25px rgba(0,0,0,.15);
+box-shadow:0 8px 25px rgba(0,0,0,.18);
 }
 
 #streak{
-font-size:40px;
+font-size:48px;
 font-weight:bold;
 margin-top:10px;
 }
 
 #countdown{
-font-size:28px;
-font-weight:bold;
-margin-top:10px;
-}
-#motivation{
-margin:20px auto;
-padding:18px;
-max-width:500px;
-text-align:center;
-font-size:22px;
-font-weight:700;
-background: rgba(255,255,255,0.18);
-backdrop-filter: blur(10px);
-border-radius:18px;
-color:white;
-box-shadow:0 8px 20px rgba(0,0,0,0.15);
-animation: glow 3s infinite alternate;
+font-size:24px;
+line-height:1.8;
+margin-top:15px;
+font-weight:600;
 }
 
-@keyframes glow{
-from{transform:scale(1);}
-to{transform:scale(1.03);}
+#motivation{
+margin-top:15px;
+font-size:18px;
+font-weight:700;
 }
+
 .exam-note{
-margin-top:12px;
-font-size:14px;
-opacity:0.85;
+margin-top:10px;
+font-size:13px;
 font-style:italic;
-color:#fff;
-}
+opacity:.9;
+         }
          
     </style>  
     
@@ -268,25 +257,29 @@ color:#fff;
         
         <section class="exam-dashboard">
 
-  <div class="tracker-box">
-      <h3>🔥 Current Streak</h3>
-      <div id="streak">0</div>
-  </div>
+<div class="tracker-box">
+<h3>🔥 Current Streak</h3>
+<div id="streak">0</div>
+</div>
 
-  <div class="tracker-box">
-      <h3>⏳ UPSC Countdown</h3>
-      <div id="prelimsCount">Loading...</div>
-      <div id="mainsCount">Loading...</div>
-      <p class="exam-note">
+<div class="tracker-box">
+<h3>⏳ UPSC Countdown</h3>
+
+<div id="countdown">
+Loading...
+</div>
+
+<div id="motivation">
+🎯 Every day counts
+</div>
+
+<p class="exam-note">
 *Expected dates based on UPSC calendar
-      </p>
-      <div id="motivation">
-        🎯 Every day counts.
-      </div>
+</p>
 
-  </div>
+</div>
 
-</section>
+        </section> 
 
         
        <div id="analytics" class="tab-content">
