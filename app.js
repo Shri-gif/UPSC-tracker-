@@ -1,4 +1,4 @@
-import { supabase, signUp, signIn, signOut, getCurrentUser, onAuthStateChange } from './db.js';
+Uimport { supabase, signUp, signIn, signOut, getCurrentUser, onAuthStateChange } from './db.js';
 
 let currentUser = null;
 let weeklyChart = null;
@@ -393,7 +393,6 @@ async function saveAnalysis(aiData) {
 }
 window.processVideo = processVideo;
 
-
 const today = new Date().toDateString();
 
 let lastStudyDate = localStorage.getItem("lastStudyDate");
@@ -419,3 +418,22 @@ localStorage.setItem("lastStudyDate", today);
 
 document.getElementById("streak").innerText = streak;
 
+setInterval(function(){
+let now = new Date().getTime();
+let prelims = new Date("May 24, 2026 00:00:00").getTime();
+let mains   = new Date("Sep 20, 2026 00:00:00").getTime();
+function getTimeLeft(exam){
+ let gap = exam-now;
+ let days = Math.floor(gap/(1000*60*60*24));
+ let hours = Math.floor((gap%(1000*60*60*24))/(1000*60*60));
+ let mins = Math.floor((gap%(1000*60*60))/60000);
+
+ return days + "d " + hours + "h " + mins + "m";
+}
+
+document.getElementById("countdown").innerHTML =
+"🥇 Prelims: " + getTimeLeft(prelims) + "<br>" +
+"📝 Mains: " + getTimeLeft(mains) +
+"<br><small><i>*Expected dates</i></small>";
+
+},1000);
