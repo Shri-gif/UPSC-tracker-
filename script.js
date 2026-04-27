@@ -1,7 +1,7 @@
-// UPSC Exam Dates (India Time)
-const UPSC_PRELIMS_2025 = new Date('2025-05-25T09:30:00+05:30').getTime();
-const UPSC_MAINS_2025 = new Date('2025-08-22T09:30:00+05:30').getTime();
-
+// UPSC 2026 Expected Dates (Tentative - Will be updated)
+const UPSC_PRELIMS_2026 = new Date('2026-05-24T09:30:00+05:30').getTime();  // Expected
+const UPSC_MAINS_2026 = new Date('2026-08-21T09:30:00+05:30').getTime();    // Expected
+ 
 // Streak System
 let streakCount = 0;
 let lastStudyDate = null;
