@@ -91,10 +91,10 @@ function updateCountdowns() {
     const now = new Date().getTime();
     
     // Prelims
-    updateSingleCountdown('prelims', UPSC_PRELIMS_2025, now, 'PRELIMS 2025');
+    updateSingleCountdown('prelims', UPSC_PRELIMS_2026, now, 'PRELIMS 2026');
     
     // Mains
-    updateSingleCountdown('mains', UPSC_MAINS_2025, now, 'MAINS 2025');
+    updateSingleCountdown('mains', UPSC_MAINS_2026, now, 'MAINS 2026');
 }
 
 function updateSingleCountdown(prefix, targetTime, now, examName) {
