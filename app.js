@@ -392,3 +392,103 @@ async function saveAnalysis(aiData) {
   } 
 }
 window.processVideo = processVideo;
+
+// ---------- STREAK SYSTEM ----------
+
+function updateStreak(){
+
+const today = new Date().toDateString();
+
+let lastStudyDate=localStorage.getItem("lastStudyDate");
+let streak=parseInt(localStorage.getItem("streak"))||0;
+
+if(!lastStudyDate){
+streak=1;
+}
+
+else{
+
+let last=new Date(lastStudyDate);
+let diff=(new Date(today)-last)/(1000*60*60*24);
+
+if(diff===1){
+streak++;
+}
+else if(diff>1){
+streak=1;
+}
+
+}
+
+localStorage.setItem("streak",streak);
+localStorage.setItem("lastStudyDate",today);
+
+document.getElementById("streak").innerText=
+streak+" Days";
+}
+
+
+
+// ---------- COUNTDOWN ----------
+
+function updateCountdown(){
+
+let now=new Date().getTime();
+
+let prelims=
+new Date("May 24, 2026 00:00:00").getTime();
+
+let mains=
+new Date("August 21, 2026 00:00:00").getTime();
+
+
+function timeLeft(exam){
+
+let gap=exam-now;
+
+let days=Math.floor(
+gap/(1000*60*60*24)
+);
+
+let hours=Math.floor(
+(gap%(1000*60*60*24))
+/
+(1000*60*60)
+);
+
+let mins=Math.floor(
+(gap%(1000*60*60))
+/
+60000
+);
+
+return days+"d "
++hours+"h "
++mins+"m";
+}
+
+
+document.getElementById("countdown").innerHTML=
+"🥇 Prelims: "
++timeLeft(prelims)
++"<br>"+
+"📝 Mains: "
++timeLeft(mains);
+
+}
+
+document.addEventListener(
+"DOMContentLoaded",
+function(){
+
+updateStreak();
+
+updateCountdown();
+
+setInterval(
+updateCountdown,
+1000
+);
+
+}
+);
