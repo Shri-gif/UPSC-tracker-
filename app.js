@@ -420,7 +420,7 @@ localStorage.setItem("lastStudyDate", today);
 document.getElementById("streak").innerText = streak;
 
 const prelimsDate = new Date("May 24, 2026 00:00:00").getTime();
-const mainsDate   = new Date("Sept 18, 2026 00:00:00").getTime();
+const mainsDate   = new Date("Aug 21, 2026 00:00:00").getTime();
 
 setInterval(function(){
 
