@@ -259,31 +259,37 @@ opacity:.9;
     </div>
         </div>
         
-        <section class="exam-dashboard">
+        <div class="dashboard">
+        <div class="streak-card">
+            <h3>📈 Study Streak</h3>
+            <div class="streak-display">
+                <span class="streak-number" id="streakCount">0</span>
+                <span class="streak-label">days</span>
+            </div>
+            <div class="streak-actions">
+                <button id="markToday" class="btn-mark">✅ Mark Today</button>
+                <button id="resetStreak" class="btn-reset">🔄 Reset</button>
+            </div>
+            <div class="streak-info">
+                <span id="lastStudyDate">-</span>
+            </div>
+        </div>
+            
+            <!-- Streak & Countdown Section -->
 
-<div class="tracker-box">
-<h3>🔥 Current Streak</h3>
-<div id="streak">0</div>
-</div>
-
-<div class="tracker-box">
-<h3>⏳ UPSC Countdown</h3>
-
-<div id="countdown">
-Loading...
-</div>
-
-<div id="motivation">
-🎯 Every day counts
-</div>
-
-<p class="exam-note">
-*Expected dates based on UPSC calendar
-</p>
-
-</div>
-
-        </section> 
+        <div class="countdown-card">
+            <h3>⏰ UPSC Prelims 2025</h3>
+            <div class="countdown-display" id="countdown">
+                <span id="days">00</span>D
+                <span id="hours">00</span>H
+                <span id="minutes">00</span>M
+                <span id="seconds">00</span>S
+            </div>
+            <div class="countdown-date">
+                <strong>May 25, 2025</strong>
+            </div>
+        </div>
+    </div>
 
         
        <div id="analytics" class="tab-content">
