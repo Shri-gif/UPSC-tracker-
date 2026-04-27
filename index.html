@@ -352,47 +352,47 @@ body {
 <div class="dashboard">
     <!-- Streak Card -->
     <div class="streak-card">
-        <h3>📈 Study Streak</h3>
-        <div class="streak-display">
-            <span class="streak-number" id="streakCount">0</span>
-            <span class="streak-label">days</span>
+            <h3>📈 Study Streak</h3>
+            <div class="streak-display">
+                <span class="streak-number" id="streakCount">0</span>
+                <span class="streak-label">days</span>
+            </div>
+            <div class="streak-actions">
+                <button id="markToday" class="btn-mark">✅ Mark Today</button>
+                <button id="resetStreak" class="btn-reset">🔄 Reset</button>
+            </div>
+            <div class="streak-info">
+                <span id="lastStudyDate">-</span>
+            </div>
         </div>
-        <div class="streak-actions">
-            <button id="markToday" class="btn-mark">✅ Mark Today</button>
-            <button id="resetStreak" class="btn-reset">🔄 Reset</button>
-        </div>
-        <div class="streak-info">
-            <span id="lastStudyDate">-</span>
-        </div>
-    </div>
 
-    <!-- Prelims Countdown -->
-    <div class="countdown-card">
-        <h3 id="prelimsStatus">📚 PRELIMS 2025</h3>
-        <div class="countdown-display" id="prelimsCountdown">
-            <span id="prelimsDays">00</span>D
-            <span id="prelimsHours">00</span>H
-            <span id="prelimsMinutes">00</span>M
-            <span id="prelimsSeconds">00</span>S
+        <!-- Prelims Countdown -->
+        <div class="countdown-card prelims-card">
+            <h3 id="prelimsStatus">📚 UPSC PRELIMS 2025</h3>
+            <div class="countdown-display" id="prelimsCountdown">
+                <span id="prelimsDays">--</span> <span>D</span>
+                <span id="prelimsHours">--</span> <span>H</span>
+                <span id="prelimsMinutes">--</span> <span>M</span>
+                <span id="prelimsSeconds">--</span> <span>S</span>
+            </div>
+            <div class="countdown-date">
+                <strong>25 May 2025, 9:30 AM</strong>
+            </div>
         </div>
-        <div class="countdown-date">
-            <strong>25 May 2026</strong>
-        </div>
-    </div>
 
-    <!-- Mains Countdown -->
-    <div class="countdown-card">
-        <h3 id="mainsStatus">📖 MAINS 2025</h3>
-        <div class="countdown-display" id="mainsCountdown">
-            <span id="mainsDays">00</span>D
-            <span id="mainsHours">00</span>H
-            <span id="mainsMinutes">00</span>M
-            <span id="mainsSeconds">00</span>S
+        <!-- Mains Countdown -->
+        <div class="countdown-card mains-card">
+            <h3 id="mainsStatus">📖 UPSC MAINS 2025</h3>
+            <div class="countdown-display" id="mainsCountdown">
+                <span id="mainsDays">--</span> <span>D</span>
+                <span id="mainsHours">--</span> <span>H</span>
+                <span id="mainsMinutes">--</span> <span>M</span>
+                <span id="mainsSeconds">--</span> <span>S</span>
+            </div>
+            <div class="countdown-date">
+                <strong>22 Aug 2025 (Tentative)</strong>
+            </div>
         </div>
-        <div class="countdown-date">
-            <strong>22 Aug 2026 (Tentative)</strong>
-        </div>
-    </div>
     <p class="exam-note">
 *Expected dates based on UPSC calendar
     </p>
