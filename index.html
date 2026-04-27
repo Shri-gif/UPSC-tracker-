@@ -350,6 +350,33 @@ color:#fff;
     <!-- 🔥 CRITICAL: These script tags MUST be present -->
     <script type="module" src="db.js"></script>
     <script type="module" src="app.js"></script>
+    
+<script>
+function updateCountdown(){
 
+const prelims = new Date("May 24 2026 00:00:00");
+const mains   = new Date("Sep 20 2026 00:00:00");
+
+function timeLeft(target){
+ let now = new Date();
+ let gap = target-now;
+
+ let days = Math.floor(gap/(1000*60*60*24));
+ let hours = Math.floor((gap%(1000*60*60*24))/(1000*60*60));
+ let mins = Math.floor((gap%(1000*60*60))/60000);
+
+ return days+"d "+hours+"h "+mins+"m";
+}
+
+document.getElementById("countdown").innerHTML =
+"🥇 Prelims: "+timeLeft(prelims)+"<br>"+
+"📝 Mains: "+timeLeft(mains);
+
+}
+
+updateCountdown();
+setInterval(updateCountdown,1000);
+</script>
+    
 </body>
 </html>
