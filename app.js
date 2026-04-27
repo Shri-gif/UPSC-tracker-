@@ -392,3 +392,45 @@ async function saveAnalysis(aiData) {
   } 
 }
 window.processVideo = processVideo;
+
+
+const today = new Date().toDateString();
+
+let lastStudyDate = localStorage.getItem("lastStudyDate");
+let streak = parseInt(localStorage.getItem("streak")) || 0;
+
+if (!lastStudyDate){
+   streak = 1;
+}
+else{
+ let last = new Date(lastStudyDate);
+ let diff = (new Date(today)-last)/(1000*60*60*24);
+
+ if(diff === 1){
+   streak++;
+ }
+ else if(diff > 1){
+   streak = 1; // break streak reset
+ }
+}
+
+localStorage.setItem("streak", streak);
+localStorage.setItem("lastStudyDate", today);
+
+document.getElementById("streak").innerText = streak;
+
+const examDate = new Date("May 24, 2026 00:00:00").getTime();
+
+setInterval(function(){
+
+ let now = new Date().getTime();
+ let gap = examDate - now;
+
+ let days = Math.floor(gap/(1000*60*60*24));
+ let hours = Math.floor((gap%(1000*60*60*24))/(1000*60*60));
+ let mins = Math.floor((gap%(1000*60*60))/60000);
+
+ document.getElementById("countdown").innerHTML =
+ days + " Days " + hours + " Hours " + mins + " Min Left";
+
+},1000);
