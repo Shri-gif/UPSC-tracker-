@@ -425,7 +425,7 @@ async function saveAnalysis(aiData) {
 }
 
 // 🔥 Manual Hindu Analysis Add Function (Tumhare liye)
-window.addManualAnalysis = async function() {
+/*window.addManualAnalysis = async function() {
 
   const topic = prompt("Topic enter karo:");
   if (!topic || topic.trim() === "") {
@@ -462,7 +462,7 @@ window.addManualAnalysis = async function() {
   await loadDailyAnalysis();
 
   alert("✅ Manual analysis saved!");
-};
+};*/
 
 // CSS for better UI
 const style = document.createElement('style');
@@ -482,3 +482,39 @@ style.textContent = `
   @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
 `;
 document.head.appendChild(style);
+
+document.addEventListener("DOMContentLoaded", () => {
+
+const btn = document.getElementById("saveAnalysisBtn");
+
+if(!btn) return;
+
+btn.addEventListener("click", async () => {
+
+const data = {
+  topic: document.getElementById("topic").value.trim(),
+  what_is: document.getElementById("what").value.trim(),
+  why_in_news: document.getElementById("why").value.trim(),
+  analysis: document.getElementById("analysis").value.trim(),
+  background: "",
+  challenges: "",
+  exam_angle: ""
+};
+
+if(!data.topic || !data.what_is || !data.why_in_news){
+  alert("❌ Fill required fields");
+  return;
+}
+
+await saveAnalysis(data);
+await loadDailyAnalysis();
+
+alert("✅ Saved");
+
+// reset
+document.querySelectorAll("#manualForm input, #manualForm textarea")
+.forEach(el => el.value="");
+
+});
+
+});
