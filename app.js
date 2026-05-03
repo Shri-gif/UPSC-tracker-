@@ -426,21 +426,41 @@ async function saveAnalysis(aiData) {
 
 // 🔥 Manual Hindu Analysis Add Function (Tumhare liye)
 window.addManualAnalysis = async function() {
+
   const topic = prompt("Topic enter karo:");
-  if (!topic) return;
+  if (!topic || topic.trim() === "") {
+    alert("❌ Topic required!");
+    return;
+  }
+
+  const what = prompt("What is it?");
+  const why = prompt("Why in news?");
+
+  // 🚫 stop if user cancels midway
+  if (what === null || why === null) {
+    alert("❌ Entry cancelled");
+    return;
+  }
 
   const data = {
-    topic,
-    what_is: prompt("What is it?") || "",
-    why_in_news: prompt("Why in news?") || "",
-    background: prompt("Background:") || "",
-    analysis: prompt("Analysis:") || "",
-    challenges: prompt("Challenges:") || "",
-    exam_angle: prompt("Exam angle:") || ""
+    topic: topic.trim(),
+    what_is: what.trim(),
+    why_in_news: why.trim(),
+    background: (prompt("Background:") || "").trim(),
+    analysis: (prompt("Analysis:") || "").trim(),
+    challenges: (prompt("Challenges:") || "").trim(),
+    exam_angle: (prompt("Exam angle:") || "").trim()
   };
+
+  // 🛑 FINAL VALIDATION
+  if (!data.topic || !data.what_is || !data.why_in_news) {
+    alert("❌ Important fields missing!");
+    return;
+  }
 
   await saveAnalysis(data);
   await loadDailyAnalysis();
+
   alert("✅ Manual analysis saved!");
 };
 
