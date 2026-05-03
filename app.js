@@ -1,16 +1,3 @@
-import React from 'react';
-import HinduAnalysis from './components/HinduAnalysis';
-import './App.css';
-
-function App() {
-  return (
-    <div className="App">
-      <HinduAnalysis />
-    </div>
-  );
-}
-export default App;
-
 import { supabase, signUp, signIn, signOut, getCurrentUser, onAuthStateChange } from './db.js';
 
 let currentUser = null;
