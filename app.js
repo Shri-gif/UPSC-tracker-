@@ -490,15 +490,14 @@ const btn = document.getElementById("saveAnalysisBtn");
 if(!btn) return;
 
 btn.addEventListener("click", async () => {
-
 const data = {
   topic: document.getElementById("topic").value.trim(),
   what_is: document.getElementById("what").value.trim(),
   why_in_news: document.getElementById("why").value.trim(),
+  background: document.getElementById("background").value.trim(),
   analysis: document.getElementById("analysis").value.trim(),
-  background: "",
-  challenges: "",
-  exam_angle: ""
+  challenges: document.getElementById("challenges").value.trim(),
+  exam_angle: document.getElementById("exam").value.trim()
 };
 
 if(!data.topic || !data.what_is || !data.why_in_news){
