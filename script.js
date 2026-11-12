@@ -1,6 +1,6 @@
-// UPSC 2026 Expected Dates (Tentative - Will be updated)
-const UPSC_PRELIMS_2026 = new Date('2026-05-24T09:30:00+05:30').getTime();  // Expected
-const UPSC_MAINS_2026 = new Date('2026-08-21T09:30:00+05:30').getTime();    // Expected
+// UPSC 2027 Expected Dates (Tentative - Will be updated)
+const UPSC_PRELIMS_2027 = new Date('2027-05-24T09:30:00+05:30').getTime();  // Expected
+const UPSC_MAINS_2027 = new Date('2027-08-21T09:30:00+05:30').getTime();    // Expected
  
 // Streak System
 let streakCount = 0;
@@ -91,10 +91,10 @@ function updateCountdowns() {
     const now = new Date().getTime();
     
     // Prelims
-    updateSingleCountdown('prelims', UPSC_PRELIMS_2026, now, 'PRELIMS 2026');
+    updateSingleCountdown('prelims', UPSC_PRELIMS_2027, now, 'PRELIMS 2027');
     
     // Mains
-    updateSingleCountdown('mains', UPSC_MAINS_2026, now, 'MAINS 2026');
+    updateSingleCountdown('mains', UPSC_MAINS_2027, now, 'MAINS 2027');
 }
 
 function updateSingleCountdown(prefix, targetTime, now, examName) {
